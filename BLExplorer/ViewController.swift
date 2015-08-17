@@ -14,6 +14,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate {
     var cbManager: CBCentralManager?
 
     @IBAction func scanButton() {
+        print("scan button")
         cbManager?.scanForPeripheralsWithServices(nil, options: nil)
     }
     
