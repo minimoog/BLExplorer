@@ -94,16 +94,34 @@ class BLPeripheralTableViewController: UITableViewController, CBCentralManagerDe
         }
     }
     
+    // --------------- Segue --------------------
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "ServicesSegue" {
+            if let servicesTableViewController = segue.destinationViewController as? BLServicesTableViewController {
+                
+                if let cell = sender as? UITableViewCell, let indexPath = tableView.indexPathForCell(cell) {
+                    
+                    servicesTableViewController.peripheral = peripherals[indexPath.row]
+                }
+            }
+        }
+    }
+    
     // --------------- Table View ---------------
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return peripherals.count
+        
+        //return 10
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("UITableViewCell", forIndexPath: indexPath)
         
         cell.textLabel?.text = peripherals[indexPath.row].name
+        
+        //cell.textLabel?.text = String(indexPath.row)
         
         return cell
     }

@@ -30,6 +30,9 @@
                                         </label>
                                     </subviews>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <segue destination="jKH-wI-xEd" kind="show" identifier="ServicesSegue" id="4jQ-sv-0TL"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -38,18 +41,15 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="rhX-gX-WMz"/>
-                    <connections>
-                        <segue destination="jKH-wI-xEd" kind="show" identifier="ServicesSegue" id="hrr-Zg-Xiu"/>
-                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Sd6-Ry-C7Q" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="837" y="188"/>
         </scene>
-        <!--Table View Controller-->
+        <!--Services Table View Controller-->
         <scene sceneID="vAi-rM-2BK">
             <objects>
-                <tableViewController id="jKH-wI-xEd" sceneMemberID="viewController">
+                <tableViewController id="jKH-wI-xEd" customClass="BLServicesTableViewController" customModule="BLExplorer" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="pqc-wt-RDb">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
