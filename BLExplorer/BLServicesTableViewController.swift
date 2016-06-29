@@ -17,6 +17,8 @@ class BLServicesTableViewController: UITableViewController, CBPeripheralDelegate
         super.viewDidLoad()
         
         peripheral?.delegate = self
+        
+        peripheral?.discoverServices(nil)
     }
     
     // ------------ Table view --------------
@@ -28,10 +30,22 @@ class BLServicesTableViewController: UITableViewController, CBPeripheralDelegate
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("UITableViewCell", forIndexPath: indexPath)
         
-        //cell.textLabel?.text = peripherals[indexPath.row].name
-        
-        cell.textLabel?.text = String(indexPath.row)
+        cell.textLabel?.text = services[indexPath.row].UUID.UUIDString
         
         return cell
+    }
+    
+    // ------------ CBPeripheralDelegate -----------
+    
+    func peripheral(peripheral: CBPeripheral, didDiscoverServices error: NSError?) {
+        if error == nil {
+            print("Discovered services...")
+            
+            if let discoveredServices = peripheral.services {
+                services = discoveredServices
+            }
+            
+            tableView.reloadData()
+        }
     }
 }
