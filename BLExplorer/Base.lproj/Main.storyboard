@@ -46,6 +46,34 @@
             </objects>
             <point key="canvasLocation" x="837" y="188"/>
         </scene>
+        <!--Characteristics Table View Controller-->
+        <scene sceneID="zn8-M2-u93">
+            <objects>
+                <tableViewController id="lFq-8c-OIM" customClass="BLCharacteristicsTableViewController" customModule="BLExplorer" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="aSH-8g-AyE">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="AxX-sI-0v5">
+                                <rect key="frame" x="0.0" y="92" width="600" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="AxX-sI-0v5" id="meE-IT-ap1">
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="lFq-8c-OIM" id="hQ3-Hh-ZOF"/>
+                            <outlet property="delegate" destination="lFq-8c-OIM" id="LtM-ZI-mD6"/>
+                        </connections>
+                    </tableView>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="7iQ-rI-gXy" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2329" y="188"/>
+        </scene>
         <!--Services Table View Controller-->
         <scene sceneID="vAi-rM-2BK">
             <objects>
@@ -62,6 +90,9 @@
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <segue destination="lFq-8c-OIM" kind="show" identifier="CharacteristicsSegue" id="wKa-si-aaU"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>

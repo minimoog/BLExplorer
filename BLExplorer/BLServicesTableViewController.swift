@@ -21,6 +21,18 @@ class BLServicesTableViewController: UITableViewController, CBPeripheralDelegate
         peripheral?.discoverServices(nil)
     }
     
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "CharacteristicsSegue" {
+            if let characteristicsTableViewController = segue.destinationViewController as? BLCharacteristicsTableViewController {
+                
+                if let cell = sender as? UITableViewCell, let indexPath = tableView.indexPathForCell(cell) {
+                    
+                    characteristicsTableViewController.service = services[indexPath.row]
+                }
+            }
+        }
+    }
+    
     // ------------ Table view --------------
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
