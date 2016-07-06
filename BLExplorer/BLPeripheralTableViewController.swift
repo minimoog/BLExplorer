@@ -18,14 +18,12 @@ class BLPeripheralTableViewController: UITableViewController, CBCentralManagerDe
         super.viewDidLoad()
         
         cbManager = CBCentralManager(delegate: self, queue: nil)
-        
-        cbManager?.scanForPeripheralsWithServices(nil, options: nil)
     }
     
     // ---------------- CBCentralManagerDelegate ---------------------
     
     func centralManager(central: CBCentralManager, didConnectPeripheral peripheral: CBPeripheral) {
-        // ### TODO
+        performSegueWithIdentifier("ServicesSegue", sender: self)
     }
     
     func centralManager(central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: NSError?) {
@@ -78,12 +76,18 @@ class BLPeripheralTableViewController: UITableViewController, CBCentralManagerDe
 //        }
         
         peripherals.append(peripheral)
+        
+        tableView.reloadData()
     }
     
     func centralManagerDidUpdateState(central: CBCentralManager) {
         if central.state == .PoweredOff {
             print("Core BLE powered off")
         } else if central.state == .PoweredOn {
+            
+            //start scanning
+            cbManager?.scanForPeripheralsWithServices(nil, options: nil)
+            
             print("Core BLE powered on")
         } else if (central.state == .Unauthorized) {
             print("Core BLE unauthorized")
@@ -112,8 +116,6 @@ class BLPeripheralTableViewController: UITableViewController, CBCentralManagerDe
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return peripherals.count
-        
-        //return 10
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -121,8 +123,10 @@ class BLPeripheralTableViewController: UITableViewController, CBCentralManagerDe
         
         cell.textLabel?.text = peripherals[indexPath.row].name
         
-        //cell.textLabel?.text = String(indexPath.row)
-        
         return cell
+    }
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        cbManager?.connectPeripheral(peripherals[indexPath.row], options: nil)
     }
 }

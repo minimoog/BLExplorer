@@ -25,14 +25,11 @@
                                             <rect key="frame" x="15" y="0.0" width="570" height="43"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
                                 </tableViewCellContentView>
-                                <connections>
-                                    <segue destination="jKH-wI-xEd" kind="show" identifier="ServicesSegue" id="4jQ-sv-0TL"/>
-                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -41,6 +38,9 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="rhX-gX-WMz"/>
+                    <connections>
+                        <segue destination="jKH-wI-xEd" kind="show" identifier="ServicesSegue" id="dMe-bA-jgv"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Sd6-Ry-C7Q" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
