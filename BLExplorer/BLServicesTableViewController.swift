@@ -40,7 +40,7 @@ class BLServicesTableViewController: UITableViewController, CBPeripheralDelegate
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("UITableViewCell", forIndexPath: indexPath)
+        let cell = tableView.dequeueReusableCellWithIdentifier("ServiceCell", forIndexPath: indexPath)
         
         cell.textLabel?.text = services[indexPath.row].UUID.UUIDString
         

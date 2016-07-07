@@ -104,8 +104,7 @@ class BLPeripheralTableViewController: UITableViewController, CBCentralManagerDe
         if segue.identifier == "ServicesSegue" {
             if let servicesTableViewController = segue.destinationViewController as? BLServicesTableViewController {
                 
-                if let cell = sender as? UITableViewCell, let indexPath = tableView.indexPathForCell(cell) {
-                    
+                if let indexPath = tableView.indexPathForSelectedRow {                    
                     servicesTableViewController.peripheral = peripherals[indexPath.row]
                 }
             }
@@ -119,7 +118,7 @@ class BLPeripheralTableViewController: UITableViewController, CBCentralManagerDe
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("UITableViewCell", forIndexPath: indexPath)
+        let cell = tableView.dequeueReusableCellWithIdentifier("PeripheralCell", forIndexPath: indexPath)
         
         cell.textLabel?.text = peripherals[indexPath.row].name
         

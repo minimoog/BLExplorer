@@ -26,7 +26,7 @@ class BLCharacteristicsTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("UITableViewCell", forIndexPath: indexPath)
+        let cell = tableView.dequeueReusableCellWithIdentifier("CharacteristicCell", forIndexPath: indexPath)
         
         cell.textLabel?.text = String(data: characteristics[indexPath.row].value!, encoding: NSUTF8StringEncoding)
         
