@@ -10,13 +10,18 @@ import UIKit
 import CoreBluetooth
 
 class BLCharacteristicsTableViewController: UITableViewController {
-    var service: CBService?
+    var service: CBService? {
+        didSet {
+            if let service = self.service {
+                characteristics = service.characteristics!
+            }
+        }
+    }
+    
     var characteristics = [CBCharacteristic]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-       
-        characteristics = (service?.characteristics)!
     }
         
     // ------------ Table view --------------
@@ -28,7 +33,8 @@ class BLCharacteristicsTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("CharacteristicCell", forIndexPath: indexPath)
         
-        cell.textLabel?.text = String(data: characteristics[indexPath.row].value!, encoding: NSUTF8StringEncoding)
+        //cell.textLabel?.text = String(data: characteristics[indexPath.row], encoding: NSUTF8StringEncoding)
+        cell.textLabel?.text = characteristics[indexPath.row].UUID.UUIDString
         
         return cell
     }

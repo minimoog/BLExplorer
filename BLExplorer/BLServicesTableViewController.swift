@@ -25,9 +25,9 @@ class BLServicesTableViewController: UITableViewController, CBPeripheralDelegate
         if segue.identifier == "CharacteristicsSegue" {
             if let characteristicsTableViewController = segue.destinationViewController as? BLCharacteristicsTableViewController {
                 
-                if let cell = sender as? UITableViewCell, let indexPath = tableView.indexPathForCell(cell) {
-                    
+                if let indexPath = tableView.indexPathForSelectedRow {
                     characteristicsTableViewController.service = services[indexPath.row]
+
                 }
             }
         }
@@ -47,6 +47,11 @@ class BLServicesTableViewController: UITableViewController, CBPeripheralDelegate
         return cell
     }
     
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        //discover characteristics for the service
+        peripheral?.discoverCharacteristics(nil, forService: services[indexPath.row])
+    }
+    
     // ------------ CBPeripheralDelegate -----------
     
     func peripheral(peripheral: CBPeripheral, didDiscoverServices error: NSError?) {
@@ -58,6 +63,14 @@ class BLServicesTableViewController: UITableViewController, CBPeripheralDelegate
             }
             
             tableView.reloadData()
+        }
+    }
+    
+    func peripheral(peripheral: CBPeripheral, didDiscoverCharacteristicsForService service: CBService, error: NSError?) {
+        if error == nil {
+            print("Discovered charactetistics for the service \(service.UUID.UUIDString)")
+            
+            performSegueWithIdentifier("CharacteristicsSegue", sender: self)
         }
     }
 }
