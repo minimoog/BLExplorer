@@ -70,7 +70,22 @@ class BLServicesTableViewController: UITableViewController, CBPeripheralDelegate
         if error == nil {
             print("Discovered charactetistics for the service \(service.UUID.UUIDString)")
             
-            performSegueWithIdentifier("CharacteristicsSegue", sender: self)
+            if let characteristics = service.characteristics {
+                for ch in characteristics {
+                    let properties = ch.properties
+                    if properties.contains(.Read) {
+                        peripheral.readValueForCharacteristic(ch)
+                    }
+                }
+            }
+            
+            //performSegueWithIdentifier("CharacteristicsSegue", sender: self)
+        }
+    }
+    
+    func peripheral(peripheral: CBPeripheral, didUpdateValueForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
+        if error != nil {
+            print(characteristic.value)
         }
     }
 }
