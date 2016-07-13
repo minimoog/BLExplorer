@@ -9,15 +9,22 @@
 import UIKit
 import CoreBluetooth
 
-class BLCharacteristicsTableViewController: UITableViewController {
-    var service: CBService? {
-        didSet {
-            if let service = self.service {
-                characteristics = service.characteristics!
-            }
-        }
-    }
+extension NSData {
     
+    func toHexString() -> String {
+        
+        var hexString: String = String()
+        let dataBytes =  UnsafePointer<CUnsignedChar>(self.bytes)
+        
+        for i in 0..<self.length {
+            hexString +=  String(format: "%02X", dataBytes[i])
+        }
+        
+        return hexString
+    }
+}
+
+class BLCharacteristicsTableViewController: UITableViewController {
     var characteristics = [CBCharacteristic]()
     
     override func viewDidLoad() {
@@ -33,8 +40,7 @@ class BLCharacteristicsTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("CharacteristicCell", forIndexPath: indexPath)
         
-        //cell.textLabel?.text = String(data: characteristics[indexPath.row], encoding: NSUTF8StringEncoding)
-        cell.textLabel?.text = characteristics[indexPath.row].UUID.UUIDString
+        cell.textLabel?.text = characteristics[indexPath.row].value?.toHexString()
         
         return cell
     }

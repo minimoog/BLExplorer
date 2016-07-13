@@ -12,6 +12,9 @@ import CoreBluetooth
 class BLServicesTableViewController: UITableViewController, CBPeripheralDelegate {
     var peripheral: CBPeripheral?
     var services = [CBService]()
+    var characteristics = [CBCharacteristic]()
+    
+    var numberOfCharacteristicsRead: Int = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,9 +28,8 @@ class BLServicesTableViewController: UITableViewController, CBPeripheralDelegate
         if segue.identifier == "CharacteristicsSegue" {
             if let characteristicsTableViewController = segue.destinationViewController as? BLCharacteristicsTableViewController {
                 
-                if let indexPath = tableView.indexPathForSelectedRow {
-                    characteristicsTableViewController.service = services[indexPath.row]
-
+                if tableView.indexPathForSelectedRow != nil {
+                    characteristicsTableViewController.characteristics = characteristics
                 }
             }
         }
@@ -74,6 +76,7 @@ class BLServicesTableViewController: UITableViewController, CBPeripheralDelegate
                 for ch in characteristics {
                     let properties = ch.properties
                     if properties.contains(.Read) {
+                        numberOfCharacteristicsRead += 1
                         peripheral.readValueForCharacteristic(ch)
                     }
                 }
@@ -84,8 +87,16 @@ class BLServicesTableViewController: UITableViewController, CBPeripheralDelegate
     }
     
     func peripheral(peripheral: CBPeripheral, didUpdateValueForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
+        numberOfCharacteristicsRead -= 1
+        
         if error != nil {
             print(characteristic.value)
+        }
+        
+        characteristics.append(characteristic)
+        
+        if numberOfCharacteristicsRead == 0 {
+            performSegueWithIdentifier("CharacteristicsSegue", sender: self)
         }
     }
 }
