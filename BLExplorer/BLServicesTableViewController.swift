@@ -9,10 +9,21 @@
 import UIKit
 import CoreBluetooth
 
+extension UITableViewCell {
+    func enable(on: Bool) {
+        self.userInteractionEnabled = on
+        for view in contentView.subviews {
+            view.userInteractionEnabled = on
+            view.alpha = on ? 1 : 0.5
+        }
+    }
+}
+
 class BLServicesTableViewController: UITableViewController, CBPeripheralDelegate {
     var peripheral: CBPeripheral?
     var services = [CBService]()
     var characteristics = [CBCharacteristic]()
+    var mapServiceCharacteristics = [CBUUID: [CBCharacteristic]]()
     
     var numberOfCharacteristicsRead: Int = 0
     
@@ -30,8 +41,10 @@ class BLServicesTableViewController: UITableViewController, CBPeripheralDelegate
         if segue.identifier == "CharacteristicsSegue" {
             if let characteristicsTableViewController = segue.destinationViewController as? BLCharacteristicsTableViewController {
                 
-                if tableView.indexPathForSelectedRow != nil {
-                    characteristicsTableViewController.characteristics = characteristics
+                if let indexPath = tableView.indexPathForSelectedRow {
+                    if let characteristic = mapServiceCharacteristics[services[indexPath.row].UUID] {
+                        characteristicsTableViewController.characteristics = characteristic
+                    }
                 }
             }
         }
@@ -48,12 +61,20 @@ class BLServicesTableViewController: UITableViewController, CBPeripheralDelegate
         
         cell.textLabel?.text = services[indexPath.row].UUID.UUIDString
         
+        //disable included services for now services for now
+        cell.enable(services[indexPath.row].isPrimary)
+        
         return cell
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         //discover characteristics for the service
-        peripheral?.discoverCharacteristics(nil, forService: services[indexPath.row])
+        
+        if (services[indexPath.row].characteristics == nil) {
+            peripheral?.discoverCharacteristics(nil, forService: services[indexPath.row])
+        } else {
+            performSegueWithIdentifier("CharacteristicsSegue", sender: self)
+        }
     }
     
     // ------------ CBPeripheralDelegate -----------
@@ -96,6 +117,8 @@ class BLServicesTableViewController: UITableViewController, CBPeripheralDelegate
         characteristics.append(characteristic)
         
         if numberOfCharacteristicsRead == 0 {
+            mapServiceCharacteristics[characteristic.service.UUID] = characteristics
+            
             performSegueWithIdentifier("CharacteristicsSegue", sender: self)
         }
     }
