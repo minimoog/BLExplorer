@@ -29,6 +29,8 @@ class BLCharacteristicsTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        navigationItem.title = "Characteristics"
     }
         
     // ------------ Table view --------------

@@ -5,7 +5,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
     <scenes>
-        <!--Peripheral Table View Controller-->
+        <!--BLE Peripherals-->
         <scene sceneID="m23-6Y-HTp">
             <objects>
                 <tableViewController id="vRt-ba-mWq" customClass="BLPeripheralTableViewController" customModule="BLExplorer" customModuleProvider="target" sceneMemberID="viewController">
@@ -37,7 +37,7 @@
                             <outlet property="delegate" destination="vRt-ba-mWq" id="Mrc-eS-3KN"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="rhX-gX-WMz"/>
+                    <navigationItem key="navigationItem" title="BLE Peripherals" id="rhX-gX-WMz"/>
                     <connections>
                         <segue destination="jKH-wI-xEd" kind="show" identifier="ServicesSegue" id="dMe-bA-jgv"/>
                     </connections>

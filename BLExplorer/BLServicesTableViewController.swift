@@ -19,6 +19,8 @@ class BLServicesTableViewController: UITableViewController, CBPeripheralDelegate
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.navigationItem.title = "Services"
+        
         peripheral?.delegate = self
         
         peripheral?.discoverServices(nil)
