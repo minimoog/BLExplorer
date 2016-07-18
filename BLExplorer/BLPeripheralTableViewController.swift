@@ -37,43 +37,43 @@ class BLPeripheralTableViewController: UITableViewController, CBCentralManagerDe
     func centralManager(central: CBCentralManager, didDiscoverPeripheral peripheral: CBPeripheral, advertisementData: [String : AnyObject], RSSI: NSNumber) {
         print("Discovered \(peripheral.name)")
         
-//        print("Local name \(advertisementData[CBAdvertisementDataLocalNameKey] as! String)")
-//        
-//        if let manufacturerData = advertisementData[CBAdvertisementDataManufacturerDataKey] {
-//            print("Manufacturer data \(manufacturerData as! NSData)")
-//        }
-//        
-//        if let serviceData = advertisementData[CBAdvertisementDataServiceDataKey] as? [CBUUID:  NSData] {
-//            for (uuid, service) in serviceData {
-//                print("uuid: \(uuid.UUIDString), service data: \(service)")
-//            }
-//        }
-//        
-//        if let dataServiceUUIDs = advertisementData[CBAdvertisementDataServiceUUIDsKey] as? [CBUUID] {
-//            for uuid in dataServiceUUIDs {
-//                print("service uuid: \(uuid.UUIDString)")
-//            }
-//        }
-//        
-//        if let dataOverflowServiceUUIDS = advertisementData[CBAdvertisementDataOverflowServiceUUIDsKey] as? [CBUUID] {
-//            for uuid in dataOverflowServiceUUIDS {
-//                print("overflow uuid: \(uuid.UUIDString)")
-//            }
-//        }
-//        
-//        if let txPowerLevel = advertisementData[CBAdvertisementDataTxPowerLevelKey] as? NSNumber {
-//            print("tx power level: \(txPowerLevel.floatValue)")
-//        }
-//        
-//        if let connectable = advertisementData[CBAdvertisementDataIsConnectable] as? NSNumber {
-//            print("is connectable: \(connectable.boolValue)")
-//        }
-//        
-//        if let dataSolicitedServiceUUIDs = advertisementData[CBAdvertisementDataSolicitedServiceUUIDsKey] as? [CBUUID] {
-//            for uuid in dataSolicitedServiceUUIDs {
-//                print("Solicited uuid: \(uuid.UUIDString)")
-//            }
-//        }
+        print("Local name \(advertisementData[CBAdvertisementDataLocalNameKey] as! String)")
+        
+        if let manufacturerData = advertisementData[CBAdvertisementDataManufacturerDataKey] {
+            print("Manufacturer data \(manufacturerData as! NSData)")
+        }
+        
+        if let serviceData = advertisementData[CBAdvertisementDataServiceDataKey] as? [CBUUID:  NSData] {
+            for (uuid, service) in serviceData {
+                print("uuid: \(uuid.UUIDString), service data: \(service)")
+            }
+        }
+        
+        if let dataServiceUUIDs = advertisementData[CBAdvertisementDataServiceUUIDsKey] as? [CBUUID] {
+            for uuid in dataServiceUUIDs {
+                print("service uuid: \(uuid.UUIDString)")
+            }
+        }
+        
+        if let dataOverflowServiceUUIDS = advertisementData[CBAdvertisementDataOverflowServiceUUIDsKey] as? [CBUUID] {
+            for uuid in dataOverflowServiceUUIDS {
+                print("overflow uuid: \(uuid.UUIDString)")
+            }
+        }
+        
+        if let txPowerLevel = advertisementData[CBAdvertisementDataTxPowerLevelKey] as? NSNumber {
+            print("tx power level: \(txPowerLevel.floatValue)")
+        }
+        
+        if let connectable = advertisementData[CBAdvertisementDataIsConnectable] as? NSNumber {
+            print("is connectable: \(connectable.boolValue)")
+        }
+        
+        if let dataSolicitedServiceUUIDs = advertisementData[CBAdvertisementDataSolicitedServiceUUIDsKey] as? [CBUUID] {
+            for uuid in dataSolicitedServiceUUIDs {
+                print("Solicited uuid: \(uuid.UUIDString)")
+            }
+        }
         
         peripherals.append(peripheral)
         

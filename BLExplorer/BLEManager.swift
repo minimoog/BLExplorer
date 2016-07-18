@@ -87,6 +87,7 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
         }
     }
     
+    // ------------------ CBPeripheralDelegate ------------------
     
     func peripheral(peripheral: CBPeripheral, didDiscoverServices error: NSError?) {
         if error == nil {

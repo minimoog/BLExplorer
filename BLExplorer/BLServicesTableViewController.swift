@@ -81,8 +81,6 @@ class BLServicesTableViewController: UITableViewController, CBPeripheralDelegate
                     }
                 }
             }
-            
-            //performSegueWithIdentifier("CharacteristicsSegue", sender: self)
         }
     }
     
