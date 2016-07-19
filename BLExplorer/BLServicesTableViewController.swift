@@ -71,6 +71,7 @@ class BLServicesTableViewController: UITableViewController, CBPeripheralDelegate
         //discover characteristics for the service
         
         if (services[indexPath.row].characteristics == nil) {
+            characteristics.removeAll()
             peripheral?.discoverCharacteristics(nil, forService: services[indexPath.row])
         } else {
             performSegueWithIdentifier("CharacteristicsSegue", sender: self)
