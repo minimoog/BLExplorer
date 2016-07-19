@@ -37,10 +37,12 @@ class BLPeripheralTableViewController: UITableViewController, CBCentralManagerDe
     func centralManager(central: CBCentralManager, didDiscoverPeripheral peripheral: CBPeripheral, advertisementData: [String : AnyObject], RSSI: NSNumber) {
         print("Discovered \(peripheral.name)")
         
-        print("Local name \(advertisementData[CBAdvertisementDataLocalNameKey] as! String)")
+        if let localName = advertisementData[CBAdvertisementDataLocalNameKey] as? String {
+            print("Local name \(localName)")
+        }
         
-        if let manufacturerData = advertisementData[CBAdvertisementDataManufacturerDataKey] {
-            print("Manufacturer data \(manufacturerData as! NSData)")
+        if let manufacturerData = advertisementData[CBAdvertisementDataManufacturerDataKey] as? NSData {
+            print("Manufacturer data \(manufacturerData)")
         }
         
         if let serviceData = advertisementData[CBAdvertisementDataServiceDataKey] as? [CBUUID:  NSData] {
