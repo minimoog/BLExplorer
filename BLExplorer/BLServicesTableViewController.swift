@@ -19,6 +19,10 @@ extension UITableViewCell {
     }
 }
 
+protocol BLServicesDelegate : class {
+    func finishedShowing(controller: BLServicesTableViewController, peripheral: CBPeripheral)
+}
+
 class BLServicesTableViewController: UITableViewController, CBPeripheralDelegate {
     var peripheral: CBPeripheral?
     var services = [CBService]()
@@ -26,6 +30,8 @@ class BLServicesTableViewController: UITableViewController, CBPeripheralDelegate
     var mapServiceCharacteristics = [CBUUID: [CBCharacteristic]]()
     
     var numberOfCharacteristicsRead: Int = 0
+    
+    weak var delegate: BLServicesDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,6 +52,17 @@ class BLServicesTableViewController: UITableViewController, CBPeripheralDelegate
                         characteristicsTableViewController.characteristics = characteristic
                     }
                 }
+            }
+        }
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        if let peripheral = peripheral {
+            
+            if isBeingDismissed() || isMovingFromParentViewController() {
+                delegate?.finishedShowing(self, peripheral: peripheral)
             }
         }
     }

@@ -9,7 +9,7 @@
 import UIKit
 import CoreBluetooth
 
-class BLPeripheralTableViewController: UITableViewController, CBCentralManagerDelegate
+class BLPeripheralTableViewController: UITableViewController, CBCentralManagerDelegate, BLServicesDelegate
 {
     var cbManager: CBCentralManager?
     var peripherals = [CBPeripheral]()
@@ -27,7 +27,10 @@ class BLPeripheralTableViewController: UITableViewController, CBCentralManagerDe
     }
     
     func centralManager(central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: NSError?) {
-        // ### TODO
+        print("Disconnecting \(peripheral.name)")
+        
+        //start again scanning
+        cbManager?.scanForPeripheralsWithServices(nil, options: nil)
     }
     
     func centralManager(central: CBCentralManager, didFailToConnectPeripheral peripheral: CBPeripheral, error: NSError?) {
@@ -100,6 +103,11 @@ class BLPeripheralTableViewController: UITableViewController, CBCentralManagerDe
         }
     }
     
+    // --------------- BLServicesTableViewController-----------
+    func finishedShowing(controller: BLServicesTableViewController, peripheral: CBPeripheral) {
+        cbManager?.cancelPeripheralConnection(peripheral)
+    }
+    
     // --------------- Segue --------------------
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -108,6 +116,7 @@ class BLPeripheralTableViewController: UITableViewController, CBCentralManagerDe
                 
                 if let indexPath = tableView.indexPathForSelectedRow {                    
                     servicesTableViewController.peripheral = peripherals[indexPath.row]
+                    servicesTableViewController.delegate = self
                 }
             }
         }
