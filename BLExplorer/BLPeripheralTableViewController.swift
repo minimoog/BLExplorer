@@ -29,8 +29,7 @@ class BLPeripheralTableViewController: UITableViewController, CBCentralManagerDe
     func centralManager(central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: NSError?) {
         print("Disconnecting \(peripheral.name)")
         
-        //start again scanning
-        cbManager?.scanForPeripheralsWithServices(nil, options: nil)
+        //### TODO: Rescan?
     }
     
     func centralManager(central: CBCentralManager, didFailToConnectPeripheral peripheral: CBPeripheral, error: NSError?) {
