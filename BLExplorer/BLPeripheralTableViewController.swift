@@ -9,10 +9,16 @@
 import UIKit
 import CoreBluetooth
 
+struct PeripheralWithExtraData {
+    var peripheral: CBPeripheral
+    var localName: String
+    var isConnectable: Bool = true
+}
+
 class BLPeripheralTableViewController: UITableViewController, CBCentralManagerDelegate, BLServicesDelegate
 {
     var cbManager: CBCentralManager?
-    var peripherals = [CBPeripheral]()
+    var peripherals = [PeripheralWithExtraData]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,6 +29,7 @@ class BLPeripheralTableViewController: UITableViewController, CBCentralManagerDe
     // ---------------- CBCentralManagerDelegate ---------------------
     
     func centralManager(central: CBCentralManager, didConnectPeripheral peripheral: CBPeripheral) {
+        cbManager?.stopScan()
         performSegueWithIdentifier("ServicesSegue", sender: self)
     }
     
@@ -40,8 +47,12 @@ class BLPeripheralTableViewController: UITableViewController, CBCentralManagerDe
         print("Discovered \(peripheral.name)")
         print("RSSI: \(RSSI)")
         
+        var peripheralWithExtraData = PeripheralWithExtraData(peripheral: peripheral, localName: "", isConnectable: true)
+        
         if let localName = advertisementData[CBAdvertisementDataLocalNameKey] as? String {
             print("Local name \(localName)")
+            
+            peripheralWithExtraData.localName = localName
         }
         
         if let serviceData = advertisementData[CBAdvertisementDataServiceDataKey] as? [CBUUID:  NSData] {
@@ -58,9 +69,11 @@ class BLPeripheralTableViewController: UITableViewController, CBCentralManagerDe
         
         if let connectable = advertisementData[CBAdvertisementDataIsConnectable] as? NSNumber {
             print("is connectable: \(connectable.boolValue)")
+            
+            peripheralWithExtraData.isConnectable = connectable.boolValue
         }
         
-        peripherals.append(peripheral)
+        peripherals.append(peripheralWithExtraData)
         
         tableView.reloadData()
     }
@@ -95,7 +108,7 @@ class BLPeripheralTableViewController: UITableViewController, CBCentralManagerDe
             if let servicesTableViewController = segue.destinationViewController as? BLServicesTableViewController {
                 
                 if let indexPath = tableView.indexPathForSelectedRow {                    
-                    servicesTableViewController.peripheral = peripherals[indexPath.row]
+                    servicesTableViewController.peripheral = peripherals[indexPath.row].peripheral
                     servicesTableViewController.delegate = self
                 }
             }
@@ -111,12 +124,13 @@ class BLPeripheralTableViewController: UITableViewController, CBCentralManagerDe
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("PeripheralCell", forIndexPath: indexPath)
         
-        cell.textLabel?.text = peripherals[indexPath.row].name
+        cell.textLabel?.text = peripherals[indexPath.row].peripheral.name
+        cell.detailTextLabel?.text = peripherals[indexPath.row].localName
         
         return cell
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        cbManager?.connectPeripheral(peripherals[indexPath.row], options: nil)
+        cbManager?.connectPeripheral(peripherals[indexPath.row].peripheral, options: nil)
     }
 }
