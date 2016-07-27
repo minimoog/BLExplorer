@@ -30,7 +30,12 @@ class BLPeripheralTableViewController: UITableViewController, CBCentralManagerDe
     
     func centralManager(central: CBCentralManager, didConnectPeripheral peripheral: CBPeripheral) {
         cbManager?.stopScan()
-        performSegueWithIdentifier("ServicesSegue", sender: self)
+        
+        if let navigationController = self.navigationController {
+            if  navigationController.visibleViewController === self {
+                performSegueWithIdentifier("ServicesSegue", sender: self)
+            }
+        }
     }
     
     func centralManager(central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: NSError?) {
