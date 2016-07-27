@@ -24,6 +24,7 @@ protocol BLServicesDelegate : class {
 }
 
 class BLServicesTableViewController: UITableViewController, CBPeripheralDelegate {
+    var cbManager: CBCentralManager?
     var peripheral: CBPeripheral?
     var services = [CBService]()
     var characteristics = [CBCharacteristic]()
@@ -86,6 +87,10 @@ class BLServicesTableViewController: UITableViewController, CBPeripheralDelegate
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         //discover characteristics for the service
+        
+        if peripheral?.state == CBPeripheralState.Disconnected {
+            cbManager?.connectPeripheral(peripheral!, options: nil)
+        }
         
         if (services[indexPath.row].characteristics == nil) {
             characteristics.removeAll()

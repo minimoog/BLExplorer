@@ -110,6 +110,7 @@ class BLPeripheralTableViewController: UITableViewController, CBCentralManagerDe
                 if let indexPath = tableView.indexPathForSelectedRow {                    
                     servicesTableViewController.peripheral = peripherals[indexPath.row].peripheral
                     servicesTableViewController.delegate = self
+                    servicesTableViewController.cbManager = cbManager
                 }
             }
         }

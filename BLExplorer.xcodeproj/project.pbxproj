@@ -12,9 +12,9 @@
 		526062001B68079500801E06 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 526061FF1B68079500801E06 /* AppDelegate.swift */; };
 		526062051B68079500801E06 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 526062031B68079500801E06 /* Main.storyboard */; };
 		526062071B68079500801E06 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 526062061B68079500801E06 /* Assets.xcassets */; };
-		5260620A1B68079500801E06 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 526062081B68079500801E06 /* LaunchScreen.storyboard */; };
 		526062121B6807BC00801E06 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 526062111B6807BC00801E06 /* CoreBluetooth.framework */; };
 		5261C37C1D1B284400185498 /* BLPeripheralTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5261C37B1D1B284400185498 /* BLPeripheralTableViewController.swift */; };
+		52DFCE811D481F7B008DD1BF /* BLEManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52DFCE801D481F7B008DD1BF /* BLEManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,10 +24,10 @@
 		526061FF1B68079500801E06 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		526062041B68079500801E06 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		526062061B68079500801E06 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		526062091B68079500801E06 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5260620B1B68079500801E06 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		526062111B6807BC00801E06 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 		5261C37B1D1B284400185498 /* BLPeripheralTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLPeripheralTableViewController.swift; sourceTree = "<group>"; };
+		52DFCE801D481F7B008DD1BF /* BLEManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,10 +62,10 @@
 		526061FE1B68079500801E06 /* BLExplorer */ = {
 			isa = PBXGroup;
 			children = (
+				52DFCE801D481F7B008DD1BF /* BLEManager.swift */,
 				526061FF1B68079500801E06 /* AppDelegate.swift */,
 				526062031B68079500801E06 /* Main.storyboard */,
 				526062061B68079500801E06 /* Assets.xcassets */,
-				526062081B68079500801E06 /* LaunchScreen.storyboard */,
 				5260620B1B68079500801E06 /* Info.plist */,
 				5261C37B1D1B284400185498 /* BLPeripheralTableViewController.swift */,
 				5245F0DE1D1C92F300876EA5 /* BLServicesTableViewController.swift */,
@@ -132,7 +132,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5260620A1B68079500801E06 /* LaunchScreen.storyboard in Resources */,
 				526062071B68079500801E06 /* Assets.xcassets in Resources */,
 				526062051B68079500801E06 /* Main.storyboard in Resources */,
 			);
@@ -147,6 +146,7 @@
 			files = (
 				5245F0DF1D1C92F300876EA5 /* BLServicesTableViewController.swift in Sources */,
 				5261C37C1D1B284400185498 /* BLPeripheralTableViewController.swift in Sources */,
+				52DFCE811D481F7B008DD1BF /* BLEManager.swift in Sources */,
 				52590EC31D24756D00511194 /* BLCharacteristicsTableViewController.swift in Sources */,
 				526062001B68079500801E06 /* AppDelegate.swift in Sources */,
 			);
@@ -161,14 +161,6 @@
 				526062041B68079500801E06 /* Base */,
 			);
 			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		526062081B68079500801E06 /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				526062091B68079500801E06 /* Base */,
-			);
-			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
