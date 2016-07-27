@@ -12,61 +12,51 @@ import CoreBluetooth
 class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     var cbManager: CBCentralManager?
     var peripherals = [CBPeripheral]()
-    var services = [CBService]()
     
-    var discoverClosure: ((peripheral: CBPeripheral, advertisementData: [String : AnyObject], RSSI: NSNumber) -> ())?
-    var connectClosure: ((peripheral: CBPeripheral) -> ())?
-    var disconnectClosure: ((peripheral: CBPeripheral) -> ())?
+    var connectedPeripheral: CBPeripheral?
+    var services = [CBService]()
+    var characteristics = [CBCharacteristic]()
+    var mapServiceCharacteristics = [CBUUID: [CBCharacteristic]]()
+    
+    var numberOfCharacteristicsRead: Int = 0
     
     override init() {
         super.init()
         cbManager = CBCentralManager(delegate: self, queue: nil)
     }
     
+    func scan() {
+        cbManager?.scanForPeripheralsWithServices(nil, options: nil)
+    }
+    
+    func connect(peripheral: CBPeripheral) {
+        connectedPeripheral = peripheral
+        cbManager?.connectPeripheral(peripheral, options: nil)
+    }
+    
+    func disconnect(peripheral: CBPeripheral) {
+        cbManager?.cancelPeripheralConnection(peripheral)
+    }
+    
+    //--------------- CBCentralManagerDelegate
+    
     func centralManager(central: CBCentralManager, didConnectPeripheral peripheral: CBPeripheral) {
-        connectClosure!(peripheral: peripheral)
-        
         peripheral.delegate = self
         
-        connectClosure = nil
+        peripheral.discoverServices(nil)
     }
     
     func centralManager(central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: NSError?) {
-        disconnectClosure!(peripheral: peripheral)
-        
-        disconnectClosure = nil
     }
     
     func centralManager(central: CBCentralManager, didFailToConnectPeripheral peripheral: CBPeripheral, error: NSError?) {
-        // ### TODO
+        // ### Closure
     }
     
     func centralManager(central: CBCentralManager, didDiscoverPeripheral peripheral: CBPeripheral, advertisementData: [String : AnyObject], RSSI: NSNumber) {
         print("Discovered \(peripheral.name)")
        
         peripherals.append(peripheral)
-        
-        discoverClosure!(peripheral: peripheral, advertisementData: advertisementData, RSSI: RSSI)
-        
-        discoverClosure = nil
-    }
-    
-    func scan(closure: (peripheral: CBPeripheral, advertisementData: [String : AnyObject], RSSI: NSNumber) -> ()) {
-        discoverClosure = closure
-        
-        cbManager?.scanForPeripheralsWithServices(nil, options: nil)
-    }
-    
-    func connect(peripheral: CBPeripheral, didConnectClosure: (peripheral: CBPeripheral) -> ()) {
-        cbManager?.connectPeripheral(peripheral, options: nil)
-        
-        connectClosure = didConnectClosure
-    }
-    
-    func disconnect(peripheral: CBPeripheral, didDisconnectClosure: (peripheral: CBPeripheral) -> ()) {
-        cbManager?.cancelPeripheralConnection(peripheral)
-        
-        disconnectClosure = didDisconnectClosure
     }
     
     func centralManagerDidUpdateState(central: CBCentralManager) {
@@ -74,8 +64,7 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
             print("Core BLE powered off")
         } else if central.state == .PoweredOn {
             
-            //start scanning
-            cbManager?.scanForPeripheralsWithServices(nil, options: nil)
+            /////////// closure 
             
             print("Core BLE powered on")
         } else if (central.state == .Unauthorized) {
@@ -96,12 +85,41 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
             if let discoveredServices = peripheral.services {
                 services = discoveredServices
             }
+            
+            for service in services {
+                numberOfCharacteristicsRead = 0
+                peripheral.discoverCharacteristics(nil, forService: service)
+            }
         }
     }
     
     func peripheral(peripheral: CBPeripheral, didDiscoverCharacteristicsForService service: CBService, error: NSError?) {
         if error == nil {
             print("Discovered charactetistics for the service \(service.UUID.UUIDString)")
+                
+            if let characteristics = service.characteristics {
+                for ch in characteristics {
+                    let properties = ch.properties
+                    if properties.contains(.Read) {
+                        numberOfCharacteristicsRead += 1
+                        peripheral.readValueForCharacteristic(ch)
+                    }
+                }
+            }
+        }
+    }
+    
+    func peripheral(peripheral: CBPeripheral, didUpdateValueForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
+        numberOfCharacteristicsRead -= 1
+        
+        if error != nil {
+            print(characteristic.value)
+        }
+        
+        characteristics.append(characteristic)
+        
+        if numberOfCharacteristicsRead == 0 {
+            mapServiceCharacteristics[characteristic.service.UUID] = characteristics
         }
     }
 }
