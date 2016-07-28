@@ -31,11 +31,7 @@ class BLPeripheralTableViewController: UITableViewController, CBCentralManagerDe
     func centralManager(central: CBCentralManager, didConnectPeripheral peripheral: CBPeripheral) {
         cbManager?.stopScan()
         
-        if let navigationController = self.navigationController {
-            if  navigationController.visibleViewController === self {
-                performSegueWithIdentifier("ServicesSegue", sender: self)
-            }
-        }
+        performSegueWithIdentifier("ServicesSegue", sender: self)
     }
     
     func centralManager(central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: NSError?) {
@@ -103,6 +99,8 @@ class BLPeripheralTableViewController: UITableViewController, CBCentralManagerDe
     
     // --------------- BLServicesTableViewController-----------
     func finishedShowing(controller: BLServicesTableViewController, peripheral: CBPeripheral) {
+        cbManager?.delegate = self
+        
         cbManager?.cancelPeripheralConnection(peripheral)
     }
     
@@ -116,6 +114,9 @@ class BLPeripheralTableViewController: UITableViewController, CBCentralManagerDe
                     servicesTableViewController.peripheral = peripherals[indexPath.row].peripheral
                     servicesTableViewController.delegate = self
                     servicesTableViewController.cbManager = cbManager
+                    
+                    //switch the delegate
+                    cbManager?.delegate = servicesTableViewController
                 }
             }
         }

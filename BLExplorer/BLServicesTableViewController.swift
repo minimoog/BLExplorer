@@ -23,11 +23,10 @@ protocol BLServicesDelegate : class {
     func finishedShowing(controller: BLServicesTableViewController, peripheral: CBPeripheral)
 }
 
-class BLServicesTableViewController: UITableViewController, CBPeripheralDelegate {
+class BLServicesTableViewController: UITableViewController, CBPeripheralDelegate, CBCentralManagerDelegate {
     var cbManager: CBCentralManager?
     var peripheral: CBPeripheral?
     var services = [CBService]()
-    var characteristics = [CBCharacteristic]()
     var mapServiceCharacteristics = [CBUUID: [CBCharacteristic]]()
     
     var numberOfCharacteristicsRead: Int = 0
@@ -89,11 +88,11 @@ class BLServicesTableViewController: UITableViewController, CBPeripheralDelegate
         //discover characteristics for the service
         
         if peripheral?.state == CBPeripheralState.Disconnected {
-            cbManager?.connectPeripheral(peripheral!, options: nil)
+            //cbManager?.connectPeripheral(peripheral!, options: nil)
         }
         
         if (services[indexPath.row].characteristics == nil) {
-            characteristics.removeAll()
+            mapServiceCharacteristics[services[indexPath.row].UUID] = []
             peripheral?.discoverCharacteristics(nil, forService: services[indexPath.row])
         } else {
             performSegueWithIdentifier("CharacteristicsSegue", sender: self)
@@ -137,12 +136,23 @@ class BLServicesTableViewController: UITableViewController, CBPeripheralDelegate
             print(characteristic.value)
         }
         
-        characteristics.append(characteristic)
+        mapServiceCharacteristics[characteristic.service.UUID]?.append(characteristic)
         
         if numberOfCharacteristicsRead == 0 {
-            mapServiceCharacteristics[characteristic.service.UUID] = characteristics
-            
             performSegueWithIdentifier("CharacteristicsSegue", sender: self)
         }
+    }
+    
+    //  ------------ CBCentralManagerDelegate --------
+    func centralManagerDidUpdateState(central: CBCentralManager) {
+        // unused
+    }
+    
+    func centralManager(central: CBCentralManager, didConnectPeripheral peripheral: CBPeripheral) {
+        // unused
+    }
+    
+    func centralManager(central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: NSError?) {
+        print("Disconnected from \(peripheral.name)")
     }
 }
