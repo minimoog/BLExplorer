@@ -29,8 +29,6 @@ class BLServicesTableViewController: UITableViewController, CBPeripheralDelegate
     var services = [CBService]()
     var mapServiceCharacteristics = [CBUUID: [CBCharacteristic]]()
     
-    var numberOfCharacteristicsRead: Int = 0
-    
     weak var delegate: BLServicesDelegate?
     
     override func viewDidLoad() {
@@ -91,14 +89,7 @@ class BLServicesTableViewController: UITableViewController, CBPeripheralDelegate
             //cbManager?.connectPeripheral(peripheral!, options: nil)
         }
         
-        if (services[indexPath.row].characteristics == nil) {
-            if (mapServiceCharacteristics[services[indexPath.row].UUID] == nil) {
-                mapServiceCharacteristics[services[indexPath.row].UUID] = []
-                peripheral?.discoverCharacteristics(nil, forService: services[indexPath.row])
-            }
-        } else {
-            performSegueWithIdentifier("CharacteristicsSegue", sender: self)
-        }
+        performSegueWithIdentifier("CharacteristicsSegue", sender: self)
     }
     
     // ------------ CBPeripheralDelegate -----------
@@ -109,6 +100,11 @@ class BLServicesTableViewController: UITableViewController, CBPeripheralDelegate
             
             if let discoveredServices = peripheral.services {
                 services = discoveredServices
+            }
+            
+            for service in services {
+                mapServiceCharacteristics[service.UUID] = []
+                peripheral.discoverCharacteristics(nil, forService: service)
             }
             
             tableView.reloadData()
@@ -123,7 +119,6 @@ class BLServicesTableViewController: UITableViewController, CBPeripheralDelegate
                 for ch in characteristics {
                     let properties = ch.properties
                     if properties.contains(.Read) {
-                        numberOfCharacteristicsRead += 1
                         peripheral.readValueForCharacteristic(ch)
                     }
                 }
@@ -132,17 +127,11 @@ class BLServicesTableViewController: UITableViewController, CBPeripheralDelegate
     }
     
     func peripheral(peripheral: CBPeripheral, didUpdateValueForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
-        numberOfCharacteristicsRead -= 1
-        
         if error != nil {
             print(characteristic.value)
         }
         
         mapServiceCharacteristics[characteristic.service.UUID]?.append(characteristic)
-        
-        if numberOfCharacteristicsRead == 0 {
-            performSegueWithIdentifier("CharacteristicsSegue", sender: self)
-        }
     }
     
     //  ------------ CBCentralManagerDelegate --------
