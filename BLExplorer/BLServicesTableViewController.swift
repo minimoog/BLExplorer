@@ -92,8 +92,10 @@ class BLServicesTableViewController: UITableViewController, CBPeripheralDelegate
         }
         
         if (services[indexPath.row].characteristics == nil) {
-            mapServiceCharacteristics[services[indexPath.row].UUID] = []
-            peripheral?.discoverCharacteristics(nil, forService: services[indexPath.row])
+            if (mapServiceCharacteristics[services[indexPath.row].UUID] == nil) {
+                mapServiceCharacteristics[services[indexPath.row].UUID] = []
+                peripheral?.discoverCharacteristics(nil, forService: services[indexPath.row])
+            }
         } else {
             performSegueWithIdentifier("CharacteristicsSegue", sender: self)
         }
