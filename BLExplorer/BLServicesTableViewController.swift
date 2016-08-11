@@ -131,7 +131,14 @@ class BLServicesTableViewController: UITableViewController, CBPeripheralDelegate
             print(characteristic.value)
         }
         
-        mapServiceCharacteristics[characteristic.service.UUID]?.append(characteristic)
+        let characteristicArray = mapServiceCharacteristics[characteristic.service.UUID]
+        
+        if let index = characteristicArray?.indexOf(characteristic) {
+            mapServiceCharacteristics[characteristic.service.UUID]?[index] = characteristic
+        } else {
+            mapServiceCharacteristics[characteristic.service.UUID]?.append(characteristic)
+        }
+        
     }
     
     //  ------------ CBCentralManagerDelegate --------
