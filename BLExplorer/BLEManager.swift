@@ -20,6 +20,8 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     
     var numberOfCharacteristicsRead: Int = 0
     
+    var didConnectCompletionHandler: (() -> ())?
+    
     override init() {
         super.init()
         cbManager = CBCentralManager(delegate: self, queue: nil)
@@ -29,9 +31,11 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
         cbManager?.scanForPeripheralsWithServices(nil, options: nil)
     }
     
-    func connect(peripheral: CBPeripheral) {
+    func connect(peripheral: CBPeripheral, completionHandler: () -> ()) {
         connectedPeripheral = peripheral
         cbManager?.connectPeripheral(peripheral, options: nil)
+        
+        didConnectCompletionHandler = completionHandler
     }
     
     func disconnect(peripheral: CBPeripheral) {
@@ -42,6 +46,10 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     
     func centralManager(central: CBCentralManager, didConnectPeripheral peripheral: CBPeripheral) {
         peripheral.delegate = self
+        
+        if let connectedHandler = didConnectCompletionHandler {
+            connectedHandler()
+        }
         
         peripheral.discoverServices(nil)
     }
