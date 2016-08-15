@@ -17,9 +17,6 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     var services = [CBService]()
     var characteristics = [CBCharacteristic]()
     var mapServiceCharacteristics = [CBUUID: [CBCharacteristic]]()
-    
-    var numberOfCharacteristicsRead: Int = 0
-    
     var didConnectCompletionHandler: (() -> ())?
     
     override init() {
@@ -117,7 +114,6 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     }
     
     func peripheral(peripheral: CBPeripheral, didUpdateValueForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
-        numberOfCharacteristicsRead -= 1
         
         if error != nil {
             print(characteristic.value)
