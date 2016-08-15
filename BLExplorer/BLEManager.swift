@@ -95,7 +95,7 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
             }
             
             for service in services {
-                numberOfCharacteristicsRead = 0
+                mapServiceCharacteristics[service.UUID] = []
                 peripheral.discoverCharacteristics(nil, forService: service)
             }
         }
@@ -109,7 +109,6 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
                 for ch in characteristics {
                     let properties = ch.properties
                     if properties.contains(.Read) {
-                        numberOfCharacteristicsRead += 1
                         peripheral.readValueForCharacteristic(ch)
                     }
                 }
@@ -124,10 +123,12 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
             print(characteristic.value)
         }
         
-        characteristics.append(characteristic)
+        let characteristicArray = mapServiceCharacteristics[characteristic.service.UUID]
         
-        if numberOfCharacteristicsRead == 0 {
-            mapServiceCharacteristics[characteristic.service.UUID] = characteristics
+        if let index = characteristicArray?.indexOf(characteristic) {
+            mapServiceCharacteristics[characteristic.service.UUID]?[index] = characteristic
+        } else {
+            mapServiceCharacteristics[characteristic.service.UUID]?.append(characteristic)
         }
     }
 }
