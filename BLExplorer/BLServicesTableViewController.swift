@@ -23,7 +23,7 @@ protocol BLServicesDelegate : class {
     func finishedShowing(controller: BLServicesTableViewController, peripheral: CBPeripheral)
 }
 
-class BLServicesTableViewController: UITableViewController, CBPeripheralDelegate, CBCentralManagerDelegate {
+class BLServicesTableViewController: UITableViewController, CBPeripheralDelegate, CBCentralManagerDelegate,BLCharacteristicsDelegate {
     var cbManager: CBCentralManager?
     var peripheral: CBPeripheral?
     var services = [CBService]()
@@ -63,6 +63,11 @@ class BLServicesTableViewController: UITableViewController, CBPeripheralDelegate
                 delegate?.finishedShowing(self, peripheral: peripheral)
             }
         }
+    }
+    
+    // --------------- BLCharacteristicsTableViewController-----------
+    func finishedShowing(controller: BLCharacteristicsTableViewController) {
+        
     }
     
     // ------------ Table view --------------
