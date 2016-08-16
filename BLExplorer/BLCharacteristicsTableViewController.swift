@@ -24,15 +24,29 @@ extension NSData {
     }
 }
 
+protocol BLCharacteristicsDelegate : class {
+    func finishedShowing(controller: BLCharacteristicsTableViewController)
+}
+
 class BLCharacteristicsTableViewController: UITableViewController {
     var characteristics = [CBCharacteristic]()
+    
+    weak var delegate: BLCharacteristicsDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         navigationItem.title = "Characteristics"
     }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
         
+        if isBeingDismissed() || isMovingFromParentViewController() {
+            delegate?.finishedShowing(self)
+        }
+    }
+    
     // ------------ Table view --------------
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
