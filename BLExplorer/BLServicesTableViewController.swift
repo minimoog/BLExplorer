@@ -49,6 +49,16 @@ class BLServicesTableViewController: UITableViewController, CBPeripheralDelegate
                     if let characteristic = mapServiceCharacteristics[services[indexPath.row].UUID] {
                         characteristicsTableViewController.characteristics = characteristic
                     }
+                    
+                    characteristicsTableViewController.cbManager = cbManager
+                    characteristicsTableViewController.cbPeripheral = peripheral
+                    characteristicsTableViewController.cbService = services[indexPath.row]
+                    
+                    characteristicsTableViewController.delegate? = self
+                    
+                    //switch again delegate?
+                    cbManager?.delegate = characteristicsTableViewController
+                    peripheral?.delegate = characteristicsTableViewController
                 }
             }
         }
@@ -88,12 +98,6 @@ class BLServicesTableViewController: UITableViewController, CBPeripheralDelegate
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        //discover characteristics for the service
-        
-        if peripheral?.state == CBPeripheralState.Disconnected {
-            //cbManager?.connectPeripheral(peripheral!, options: nil)
-        }
-        
         performSegueWithIdentifier("CharacteristicsSegue", sender: self)
     }
     

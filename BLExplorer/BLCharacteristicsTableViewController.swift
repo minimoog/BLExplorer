@@ -29,6 +29,9 @@ protocol BLCharacteristicsDelegate : class {
 }
 
 class BLCharacteristicsTableViewController: UITableViewController, CBPeripheralDelegate, CBCentralManagerDelegate {
+    var cbManager: CBCentralManager?
+    var cbPeripheral: CBPeripheral?
+    var cbService: CBService?
     var characteristics = [CBCharacteristic]()
     
     weak var delegate: BLCharacteristicsDelegate?
