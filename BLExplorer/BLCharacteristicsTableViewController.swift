@@ -28,7 +28,7 @@ protocol BLCharacteristicsDelegate : class {
     func finishedShowing(controller: BLCharacteristicsTableViewController)
 }
 
-class BLCharacteristicsTableViewController: UITableViewController {
+class BLCharacteristicsTableViewController: UITableViewController, CBPeripheralDelegate, CBCentralManagerDelegate {
     var characteristics = [CBCharacteristic]()
     
     weak var delegate: BLCharacteristicsDelegate?
@@ -59,5 +59,18 @@ class BLCharacteristicsTableViewController: UITableViewController {
         cell.textLabel?.text = characteristics[indexPath.row].value?.toHexString()
         
         return cell
+    }
+    
+    //  ------------ CBCentralManagerDelegate --------
+    func centralManagerDidUpdateState(central: CBCentralManager) {
+        // unused
+    }
+    
+    func centralManager(central: CBCentralManager, didConnectPeripheral peripheral: CBPeripheral) {
+        // unused
+    }
+    
+    func centralManager(central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: NSError?) {
+        print("Disconnected from \(peripheral.name)")
     }
 }
