@@ -40,6 +40,9 @@ class BLCharacteristicsTableViewController: UITableViewController, CBPeripheralD
         super.viewDidLoad()
         
         navigationItem.title = "Characteristics"
+        
+        characteristics = []
+        cbPeripheral?.discoverCharacteristics(nil, forService: cbService!)
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -75,5 +78,32 @@ class BLCharacteristicsTableViewController: UITableViewController, CBPeripheralD
     
     func centralManager(central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: NSError?) {
         print("Disconnected from \(peripheral.name)")
+    }
+    
+    //--------------- CBPeripheralDelegate -------------
+    func peripheral(peripheral: CBPeripheral, didDiscoverCharacteristicsForService service: CBService, error: NSError?) {
+        if error == nil {
+            print("Discovered charactetistics for the service \(service.UUID.UUIDString)")
+            
+            if let characteristics = service.characteristics {
+                for ch in characteristics {
+                    let properties = ch.properties
+                    if properties.contains(.Read) {
+                        peripheral.readValueForCharacteristic(ch)
+                    }
+                }
+            }
+        }
+    }
+    
+    func peripheral(peripheral: CBPeripheral, didUpdateValueForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
+        tableView.beginUpdates()
+        
+        characteristics.append(characteristic)
+        
+        let indexPath = NSIndexPath(forRow: characteristics.count - 1, inSection: 0)
+        tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .None)
+        
+        tableView.endUpdates()
     }
 }

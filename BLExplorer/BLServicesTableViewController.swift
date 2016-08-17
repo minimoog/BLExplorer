@@ -27,7 +27,6 @@ class BLServicesTableViewController: UITableViewController, CBPeripheralDelegate
     var cbManager: CBCentralManager?
     var peripheral: CBPeripheral?
     var services = [CBService]()
-    var mapServiceCharacteristics = [CBUUID: [CBCharacteristic]]()
     
     weak var delegate: BLServicesDelegate?
     
@@ -46,10 +45,6 @@ class BLServicesTableViewController: UITableViewController, CBPeripheralDelegate
             if let characteristicsTableViewController = segue.destinationViewController as? BLCharacteristicsTableViewController {
                 
                 if let indexPath = tableView.indexPathForSelectedRow {
-                    if let characteristic = mapServiceCharacteristics[services[indexPath.row].UUID] {
-                        characteristicsTableViewController.characteristics = characteristic
-                    }
-                    
                     characteristicsTableViewController.cbManager = cbManager
                     characteristicsTableViewController.cbPeripheral = peripheral
                     characteristicsTableViewController.cbService = services[indexPath.row]
@@ -112,43 +107,8 @@ class BLServicesTableViewController: UITableViewController, CBPeripheralDelegate
                 services = discoveredServices
             }
             
-            for service in services {
-                mapServiceCharacteristics[service.UUID] = []
-                peripheral.discoverCharacteristics(nil, forService: service)
-            }
-            
             tableView.reloadData()
         }
-    }
-    
-    func peripheral(peripheral: CBPeripheral, didDiscoverCharacteristicsForService service: CBService, error: NSError?) {
-        if error == nil {
-            print("Discovered charactetistics for the service \(service.UUID.UUIDString)")
-            
-            if let characteristics = service.characteristics {
-                for ch in characteristics {
-                    let properties = ch.properties
-                    if properties.contains(.Read) {
-                        peripheral.readValueForCharacteristic(ch)
-                    }
-                }
-            }
-        }
-    }
-    
-    func peripheral(peripheral: CBPeripheral, didUpdateValueForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
-        if error != nil {
-            print(characteristic.value)
-        }
-        
-        let characteristicArray = mapServiceCharacteristics[characteristic.service.UUID]
-        
-        if let index = characteristicArray?.indexOf(characteristic) {
-            mapServiceCharacteristics[characteristic.service.UUID]?[index] = characteristic
-        } else {
-            mapServiceCharacteristics[characteristic.service.UUID]?.append(characteristic)
-        }
-        
     }
     
     //  ------------ CBCentralManagerDelegate --------
