@@ -18,6 +18,7 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     var characteristics = [CBCharacteristic]()
     var mapServiceCharacteristics = [CBUUID: [CBCharacteristic]]()
     var didConnectCompletionHandler: (() -> ())?
+    var didDisconnectCompletionHandler: (() -> ())?
     
     override init() {
         super.init()
@@ -52,6 +53,9 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     }
     
     func centralManager(central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: NSError?) {
+        if let disconnectHandler = didDisconnectCompletionHandler {
+            disconnectHandler()
+        }
     }
     
     func centralManager(central: CBCentralManager, didFailToConnectPeripheral peripheral: CBPeripheral, error: NSError?) {
