@@ -9,9 +9,13 @@
 import Foundation
 import CoreBluetooth
 
+protocol BLEManagerDelegate : class {
+    func didDiscoverPeripheral(manager: BLEManager, peripheral: CBPeripheral, localName: String?, isConnectable: Bool?)
+}
+
 class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     var cbManager: CBCentralManager?
-    var peripherals = [CBPeripheral]()
+    //var peripherals = [CBPeripheral]()
     
     var connectedPeripheral: CBPeripheral?
     var services = [CBService]()
@@ -19,6 +23,8 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     var mapServiceCharacteristics = [CBUUID: [CBCharacteristic]]()
     var didConnectCompletionHandler: (() -> ())?
     var didDisconnectCompletionHandler: (() -> ())?
+    
+    weak var delegate: BLEManagerDelegate?
     
     override init() {
         super.init()
@@ -62,12 +68,6 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
         // ### Closure
     }
     
-    func centralManager(central: CBCentralManager, didDiscoverPeripheral peripheral: CBPeripheral, advertisementData: [String : AnyObject], RSSI: NSNumber) {
-        print("Discovered \(peripheral.name)")
-       
-        peripherals.append(peripheral)
-    }
-    
     func centralManagerDidUpdateState(central: CBCentralManager) {
         if central.state == .PoweredOff {
             print("Core BLE powered off")
@@ -83,6 +83,40 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
         } else if (central.state == .Unsupported) {
             print("Core BLE state unsuppored")
         }
+    }
+    
+    func centralManager(central: CBCentralManager, didDiscoverPeripheral peripheral: CBPeripheral, advertisementData: [String : AnyObject], RSSI: NSNumber) {
+        print("Discovered \(peripheral.name)")
+        print("RSSI: \(RSSI)")
+        
+        var localName: String?
+        var isConnectable: Bool?
+        
+        if let name = advertisementData[CBAdvertisementDataLocalNameKey] as? String {
+            print("Local name \(name)")
+            
+            localName = name
+        }
+        
+        if let serviceData = advertisementData[CBAdvertisementDataServiceDataKey] as? [CBUUID:  NSData] {
+            for (uuid, service) in serviceData {
+                print("uuid: \(uuid.UUIDString), service data: \(service)")
+            }
+        }
+        
+        if let dataServiceUUIDs = advertisementData[CBAdvertisementDataServiceUUIDsKey] as? [CBUUID] {
+            for uuid in dataServiceUUIDs {
+                print("service uuid: \(uuid.UUIDString)")
+            }
+        }
+        
+        if let connectable = advertisementData[CBAdvertisementDataIsConnectable] as? NSNumber {
+            print("is connectable: \(connectable.boolValue)")
+            
+            isConnectable = connectable.boolValue
+        }
+        
+        delegate?.didDiscoverPeripheral(self, peripheral: peripheral, localName: localName, isConnectable: isConnectable)
     }
     
     // ------------------ CBPeripheralDelegate ------------------
