@@ -15,14 +15,12 @@ protocol BLEManagerDelegate : class {
 
 class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     var cbManager: CBCentralManager?
-    //var peripherals = [CBPeripheral]()
-    
     var connectedPeripheral: CBPeripheral?
-    var services = [CBService]()
     var characteristics = [CBCharacteristic]()
     var mapServiceCharacteristics = [CBUUID: [CBCharacteristic]]()
     var didConnectCompletionHandler: (() -> ())?
     var didDisconnectCompletionHandler: (() -> ())?
+    var didDiscoverServicesCompletionHandler: (() -> ())?
     
     weak var delegate: BLEManagerDelegate?
     
@@ -44,6 +42,20 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     
     func disconnect(peripheral: CBPeripheral) {
         cbManager?.cancelPeripheralConnection(peripheral)
+    }
+    
+    func discoverServices(completionHandler: () -> ()) {
+        if let peripheral = connectedPeripheral {
+            if peripheral.state == .Disconnected {
+                connect(peripheral) {
+                    peripheral.discoverServices(nil)
+                }
+            } else {
+                if peripheral.services == nil {
+                    peripheral.discoverServices(nil)
+                }
+            }
+        }
     }
     
     //--------------- CBCentralManagerDelegate
@@ -125,13 +137,8 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
         if error == nil {
             print("Discovered services...")
             
-            if let discoveredServices = peripheral.services {
-                services = discoveredServices
-            }
-            
-            for service in services {
-                mapServiceCharacteristics[service.UUID] = []
-                peripheral.discoverCharacteristics(nil, forService: service)
+            if let discoverServicesHandler = didDiscoverServicesCompletionHandler {
+                discoverServicesHandler()
             }
         }
     }
