@@ -21,6 +21,7 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     var didConnectCompletionHandler: (() -> ())?
     var didDisconnectCompletionHandler: (() -> ())?
     var didDiscoverServicesCompletionHandler: (() -> ())?
+    var didDiscoverCharacteristicsCompletionHandler: (() -> ())?
     
     weak var delegate: BLEManagerDelegate?
     
@@ -45,6 +46,8 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     }
     
     func discoverServices(completionHandler: () -> ()) {
+        didDiscoverServicesCompletionHandler = completionHandler
+        
         if let peripheral = connectedPeripheral {
             if peripheral.state == .Disconnected {
                 connect(peripheral) {
@@ -54,6 +57,16 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
                 if peripheral.services == nil {
                     peripheral.discoverServices(nil)
                 }
+            }
+        }
+    }
+    
+    func discoverCharacteristics(service: CBService, completionHandler: () -> ()) {
+        didDiscoverCharacteristicsCompletionHandler = completionHandler
+        
+        if let p = connectedPeripheral {
+            if p.state == .Connected {
+                p.discoverCharacteristics(nil, forService: service)
             }
         }
     }
@@ -146,7 +159,8 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     func peripheral(peripheral: CBPeripheral, didDiscoverCharacteristicsForService service: CBService, error: NSError?) {
         if error == nil {
             print("Discovered charactetistics for the service \(service.UUID.UUIDString)")
-                
+            
+            /*
             if let characteristics = service.characteristics {
                 for ch in characteristics {
                     let properties = ch.properties
@@ -154,6 +168,11 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
                         peripheral.readValueForCharacteristic(ch)
                     }
                 }
+            }
+            */
+            
+            if let handler = didDiscoverCharacteristicsCompletionHandler {
+                handler()
             }
         }
     }
