@@ -16,12 +16,11 @@ protocol BLEManagerDelegate : class {
 class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     var cbManager: CBCentralManager?
     var connectedPeripheral: CBPeripheral?
-    var characteristics = [CBCharacteristic]()
-    var mapServiceCharacteristics = [CBUUID: [CBCharacteristic]]()
     var didConnectCompletionHandler: (() -> ())?
     var didDisconnectCompletionHandler: (() -> ())?
     var didDiscoverServicesCompletionHandler: (() -> ())?
     var didDiscoverCharacteristicsCompletionHandler: (() -> ())?
+    var didUpdateValue: (() -> ())?
     
     weak var delegate: BLEManagerDelegate?
     
@@ -67,6 +66,18 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
         if let p = connectedPeripheral {
             if p.state == .Connected {
                 p.discoverCharacteristics(nil, forService: service)
+            }
+        }
+    }
+    
+    func updateValue(characteristic: CBCharacteristic, completionHandler: () -> ()) {
+        didUpdateValue = completionHandler
+        
+        if let p = connectedPeripheral {
+            if p.state == .Connected {
+                if characteristic.properties.contains(.Read) {
+                    p.readValueForCharacteristic(characteristic)
+                }
             }
         }
     }
@@ -160,17 +171,6 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
         if error == nil {
             print("Discovered charactetistics for the service \(service.UUID.UUIDString)")
             
-            /*
-            if let characteristics = service.characteristics {
-                for ch in characteristics {
-                    let properties = ch.properties
-                    if properties.contains(.Read) {
-                        peripheral.readValueForCharacteristic(ch)
-                    }
-                }
-            }
-            */
-            
             if let handler = didDiscoverCharacteristicsCompletionHandler {
                 handler()
             }
@@ -179,16 +179,12 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     
     func peripheral(peripheral: CBPeripheral, didUpdateValueForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
         
-        if error != nil {
+        if error == nil {
             print(characteristic.value)
-        }
-        
-        let characteristicArray = mapServiceCharacteristics[characteristic.service.UUID]
-        
-        if let index = characteristicArray?.indexOf(characteristic) {
-            mapServiceCharacteristics[characteristic.service.UUID]?[index] = characteristic
-        } else {
-            mapServiceCharacteristics[characteristic.service.UUID]?.append(characteristic)
+            
+            if let handler = didUpdateValue {
+                handler()
+            }
         }
     }
 }
