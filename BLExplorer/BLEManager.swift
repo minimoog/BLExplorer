@@ -15,13 +15,14 @@ protocol BLEManagerDelegate : class {
 }
 
 class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
-    var cbManager: CBCentralManager?
     var connectedPeripheral: CBPeripheral?
-    var didConnectCompletionHandler: (() -> ())?
-    var didDisconnectCompletionHandler: (() -> ())?
-    var didDiscoverServicesCompletionHandler: (() -> ())?
-    var didDiscoverCharacteristicsCompletionHandler: (() -> ())?
-    var didUpdateValue: (() -> ())?
+    
+    private var cbManager: CBCentralManager?
+    private var didConnectCompletionHandler: (() -> ())?
+    private var didDisconnectCompletionHandler: (() -> ())?
+    private var didDiscoverServicesCompletionHandler: (() -> ())?
+    private var didDiscoverCharacteristicsCompletionHandler: (() -> ())?
+    private var didUpdateValue: (() -> ())?
     
     weak var delegate: BLEManagerDelegate?
     
@@ -96,6 +97,8 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     }
     
     func centralManager(central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: NSError?) {
+        connectedPeripheral = nil
+        
         if let disconnectHandler = didDisconnectCompletionHandler {
             disconnectHandler()
         }
