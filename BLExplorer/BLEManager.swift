@@ -11,6 +11,7 @@ import CoreBluetooth
 
 protocol BLEManagerDelegate : class {
     func didDiscoverPeripheral(manager: BLEManager, peripheral: CBPeripheral, localName: String?, isConnectable: Bool?)
+    func didDisconnectPeripheral(manager: BLEManager, peripheral: CBPeripheral)
 }
 
 class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
@@ -98,6 +99,8 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
         if let disconnectHandler = didDisconnectCompletionHandler {
             disconnectHandler()
         }
+        
+        delegate?.didDisconnectPeripheral(self, peripheral: peripheral)
     }
     
     func centralManager(central: CBCentralManager, didFailToConnectPeripheral peripheral: CBPeripheral, error: NSError?) {
