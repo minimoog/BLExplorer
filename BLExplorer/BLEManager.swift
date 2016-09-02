@@ -12,6 +12,17 @@ import CoreBluetooth
 protocol BLEManagerDelegate : class {
     func didDiscoverPeripheral(manager: BLEManager, peripheral: CBPeripheral, localName: String?, isConnectable: Bool?)
     func didDisconnectPeripheral(manager: BLEManager, peripheral: CBPeripheral)
+    func didPoweredOn(manager: BLEManager)
+    func didPoweredOff(manager: BLEManager)
+}
+
+extension BLEManagerDelegate {
+    func didPoweredOn(manager: BLEManager) {
+    }
+    
+    func didPoweredOff(manager: BLEManager) {
+        
+    }
 }
 
 class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
@@ -33,6 +44,10 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     
     func scan() {
         cbManager?.scanForPeripheralsWithServices(nil, options: nil)
+    }
+    
+    func stopScan() {
+        cbManager?.stopScan()
     }
     
     func connect(peripheral: CBPeripheral, completionHandler: () -> ()) {
@@ -113,11 +128,10 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     func centralManagerDidUpdateState(central: CBCentralManager) {
         if central.state == .PoweredOff {
             print("Core BLE powered off")
+            delegate?.didPoweredOff(self)
         } else if central.state == .PoweredOn {
-            
-            /////////// closure 
-            
             print("Core BLE powered on")
+            delegate?.didPoweredOn(self)
         } else if (central.state == .Unauthorized) {
             print("Core BLE unauthorized")
         } else if (central.state == .Unknown) {
