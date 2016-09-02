@@ -23,8 +23,7 @@ protocol BLServicesDelegate : class {
     func finishedShowing(controller: BLServicesTableViewController, peripheral: CBPeripheral)
 }
 
-class BLServicesTableViewController: UITableViewController, CBPeripheralDelegate, CBCentralManagerDelegate,BLCharacteristicsDelegate {
-    var cbManager: CBCentralManager?
+class BLServicesTableViewController: UITableViewController, CBPeripheralDelegate, BLCharacteristicsDelegate {
     var peripheral: CBPeripheral?
     var services = [CBService]()
     
@@ -45,14 +44,12 @@ class BLServicesTableViewController: UITableViewController, CBPeripheralDelegate
             if let characteristicsTableViewController = segue.destinationViewController as? BLCharacteristicsTableViewController {
                 
                 if let indexPath = tableView.indexPathForSelectedRow {
-                    characteristicsTableViewController.cbManager = cbManager
                     characteristicsTableViewController.cbPeripheral = peripheral
                     characteristicsTableViewController.cbService = services[indexPath.row]
                     
                     characteristicsTableViewController.delegate? = self
                     
                     //switch again delegate?
-                    cbManager?.delegate = characteristicsTableViewController
                     peripheral?.delegate = characteristicsTableViewController
                 }
             }
@@ -72,7 +69,6 @@ class BLServicesTableViewController: UITableViewController, CBPeripheralDelegate
     
     // --------------- BLCharacteristicsTableViewController-----------
     func finishedShowing(controller: BLCharacteristicsTableViewController) {
-        cbManager?.delegate = self
         peripheral?.delegate = self
     }
     
@@ -109,18 +105,5 @@ class BLServicesTableViewController: UITableViewController, CBPeripheralDelegate
             
             tableView.reloadData()
         }
-    }
-    
-    //  ------------ CBCentralManagerDelegate --------
-    func centralManagerDidUpdateState(central: CBCentralManager) {
-        // unused
-    }
-    
-    func centralManager(central: CBCentralManager, didConnectPeripheral peripheral: CBPeripheral) {
-        // unused
-    }
-    
-    func centralManager(central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: NSError?) {
-        print("Disconnected from \(peripheral.name)")
     }
 }

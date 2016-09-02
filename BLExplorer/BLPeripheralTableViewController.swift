@@ -69,7 +69,6 @@ class BLPeripheralTableViewController: UITableViewController, BLEManagerDelegate
                 if let indexPath = tableView.indexPathForSelectedRow {                    
                     servicesTableViewController.peripheral = peripherals[indexPath.row].peripheral
                     servicesTableViewController.delegate? = self
-                    //servicesTableViewController.cbManager = cbManager
                     
                     //switch the delegate
                     //cbManager?.delegate = servicesTableViewController
