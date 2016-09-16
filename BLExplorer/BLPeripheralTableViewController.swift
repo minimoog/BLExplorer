@@ -28,7 +28,7 @@ class BLPeripheralTableViewController: UITableViewController, BLEManagerDelegate
     
     // ---------------- BLEManagerDelegate ---------------------------
     
-    func didDiscoverPeripheral(manager: BLEManager, peripheral: CBPeripheral, localName: String?, isConnectable: Bool?) {
+    func didDiscoverPeripheral(_ manager: BLEManager, peripheral: CBPeripheral, localName: String?, isConnectable: Bool?) {
         
         print("Discovered \(peripheral.name)")
         
@@ -42,59 +42,56 @@ class BLPeripheralTableViewController: UITableViewController, BLEManagerDelegate
         tableView.reloadData()
     }
     
-    func didDisconnectPeripheral(manager: BLEManager, peripheral: CBPeripheral) {
+    func didDisconnectPeripheral(_ manager: BLEManager, peripheral: CBPeripheral) {
         print("Disconnecting \(peripheral.name)")
         
         //### TODO: Rescan?
         //### TODO: Fail to connect handler
     }
 
-    func didPoweredOn(manager: BLEManager) {
+    func didPoweredOn(_ manager: BLEManager) {
         bleManager?.scan()
     }
         
     // --------------- BLServicesTableViewController-----------
-    func finishedShowing(controller: BLServicesTableViewController, peripheral: CBPeripheral) {
-        //cbManager?.delegate = self
+    func finishedShowing(_ controller: BLServicesTableViewController) {
+        bleManager?.delegate = self
         
         //cbManager?.cancelPeripheralConnection(peripheral)
     }
     
     // --------------- Segue --------------------
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "ServicesSegue" {
-            if let servicesTableViewController = segue.destinationViewController as? BLServicesTableViewController {
+            if let servicesTableViewController = segue.destination as? BLServicesTableViewController {
+                servicesTableViewController.delegate? = self
+                servicesTableViewController.bleManager? = bleManager!
                 
-                if let indexPath = tableView.indexPathForSelectedRow {                    
-                    servicesTableViewController.peripheral = peripherals[indexPath.row].peripheral
-                    servicesTableViewController.delegate? = self
-                    
-                    //switch the delegate
-                    //cbManager?.delegate = servicesTableViewController
-                }
+                // ### TODO: Switch delegate???
+                servicesTableViewController.bleManager?.delegate = servicesTableViewController
             }
         }
     }
     
     // --------------- Table View ---------------
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return peripherals.count
     }
 
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("PeripheralCell", forIndexPath: indexPath)
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "PeripheralCell", for: indexPath)
         
-        cell.textLabel?.text = peripherals[indexPath.row].peripheral.name
-        cell.detailTextLabel?.text = peripherals[indexPath.row].localName
+        cell.textLabel?.text = peripherals[(indexPath as NSIndexPath).row].peripheral.name
+        cell.detailTextLabel?.text = peripherals[(indexPath as NSIndexPath).row].localName
         
         return cell
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        bleManager?.connect(peripherals[indexPath.row].peripheral) {
-            self.performSegueWithIdentifier("ServicesSegue", sender: self)
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        bleManager?.connect(peripherals[(indexPath as NSIndexPath).row].peripheral) {
+            self.performSegue(withIdentifier: "ServicesSegue", sender: self)
         }
     }
 }

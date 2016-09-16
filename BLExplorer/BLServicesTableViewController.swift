@@ -10,21 +10,21 @@ import UIKit
 import CoreBluetooth
 
 extension UITableViewCell {
-    func enable(on: Bool) {
-        self.userInteractionEnabled = on
+    func enable(_ on: Bool) {
+        self.isUserInteractionEnabled = on
         for view in contentView.subviews {
-            view.userInteractionEnabled = on
+            view.isUserInteractionEnabled = on
             view.alpha = on ? 1 : 0.5
         }
     }
 }
 
 protocol BLServicesDelegate : class {
-    func finishedShowing(controller: BLServicesTableViewController, peripheral: CBPeripheral)
+    func finishedShowing(_ controller: BLServicesTableViewController)
 }
 
-class BLServicesTableViewController: UITableViewController, CBPeripheralDelegate, BLCharacteristicsDelegate {
-    var peripheral: CBPeripheral?
+class BLServicesTableViewController: UITableViewController, BLEManagerDelegate, BLCharacteristicsDelegate {
+    var bleManager: BLEManager?
     var services = [CBService]()
     
     weak var delegate: BLServicesDelegate?
@@ -34,68 +34,60 @@ class BLServicesTableViewController: UITableViewController, CBPeripheralDelegate
         
         self.navigationItem.title = "Services"
         
-        peripheral?.delegate = self
-        
-        peripheral?.discoverServices(nil)
+        // ### TODO: Discover Services
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "CharacteristicsSegue" {
-            if let characteristicsTableViewController = segue.destinationViewController as? BLCharacteristicsTableViewController {
+            if let characteristicsTableViewController = segue.destination as? BLCharacteristicsTableViewController {
                 
                 if let indexPath = tableView.indexPathForSelectedRow {
-                    characteristicsTableViewController.cbPeripheral = peripheral
-                    characteristicsTableViewController.cbService = services[indexPath.row]
+                    //characteristicsTableViewController.cbPeripheral = peripheral
+                    characteristicsTableViewController.cbService = services[(indexPath as NSIndexPath).row]
                     
                     characteristicsTableViewController.delegate? = self
-                    
-                    //switch again delegate?
-                    peripheral?.delegate = characteristicsTableViewController
                 }
             }
         }
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        
-        if let peripheral = peripheral {
             
-            if isBeingDismissed() || isMovingFromParentViewController() {
-                delegate?.finishedShowing(self, peripheral: peripheral)
-            }
+        if isBeingDismissed || isMovingFromParentViewController {
+            delegate?.finishedShowing(self)
         }
     }
     
     // --------------- BLCharacteristicsTableViewController-----------
-    func finishedShowing(controller: BLCharacteristicsTableViewController) {
-        peripheral?.delegate = self
+    func finishedShowing(_ controller: BLCharacteristicsTableViewController) {
+        //peripheral?.delegate = self
     }
     
     // ------------ Table view --------------
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return services.count
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("ServiceCell", forIndexPath: indexPath)
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ServiceCell", for: indexPath)
         
-        cell.textLabel?.text = services[indexPath.row].UUID.UUIDString
+        cell.textLabel?.text = services[(indexPath as NSIndexPath).row].uuid.uuidString
         
         //disable included services for now services for now
-        cell.enable(services[indexPath.row].isPrimary)
+        cell.enable(services[(indexPath as NSIndexPath).row].isPrimary)
         
         return cell
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        performSegueWithIdentifier("CharacteristicsSegue", sender: self)
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        performSegue(withIdentifier: "CharacteristicsSegue", sender: self)
     }
     
     // ------------ CBPeripheralDelegate -----------
     
-    func peripheral(peripheral: CBPeripheral, didDiscoverServices error: NSError?) {
+    func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: NSError?) {
         if error == nil {
             print("Discovered services...")
             
@@ -105,5 +97,10 @@ class BLServicesTableViewController: UITableViewController, CBPeripheralDelegate
             
             tableView.reloadData()
         }
+    }
+    
+    // ------------- BLEManagerDelegate ------------
+    func didDisconnectPeripheral(_ manager: BLEManager, peripheral: CBPeripheral) {
+        
     }
 }

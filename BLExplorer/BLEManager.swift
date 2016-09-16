@@ -10,17 +10,21 @@ import Foundation
 import CoreBluetooth
 
 protocol BLEManagerDelegate : class {
-    func didDiscoverPeripheral(manager: BLEManager, peripheral: CBPeripheral, localName: String?, isConnectable: Bool?)
-    func didDisconnectPeripheral(manager: BLEManager, peripheral: CBPeripheral)
-    func didPoweredOn(manager: BLEManager)
-    func didPoweredOff(manager: BLEManager)
+    func didDiscoverPeripheral(_ manager: BLEManager, peripheral: CBPeripheral, localName: String?, isConnectable: Bool?)
+    func didDisconnectPeripheral(_ manager: BLEManager, peripheral: CBPeripheral)
+    func didPoweredOn(_ manager: BLEManager)
+    func didPoweredOff(_ manager: BLEManager)
 }
 
 extension BLEManagerDelegate {
-    func didPoweredOn(manager: BLEManager) {
+    func didDiscoverPeripheral(_ manager: BLEManager, peripheral: CBPeripheral, localName: String?, isConnectable: Bool?) {
+        
     }
     
-    func didPoweredOff(manager: BLEManager) {
+    func didPoweredOn(_ manager: BLEManager) {
+    }
+    
+    func didPoweredOff(_ manager: BLEManager) {
         
     }
 }
@@ -28,12 +32,12 @@ extension BLEManagerDelegate {
 class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     var connectedPeripheral: CBPeripheral?
     
-    private var cbManager: CBCentralManager?
-    private var didConnectCompletionHandler: (() -> ())?
-    private var didDisconnectCompletionHandler: (() -> ())?
-    private var didDiscoverServicesCompletionHandler: (() -> ())?
-    private var didDiscoverCharacteristicsCompletionHandler: (() -> ())?
-    private var didUpdateValue: (() -> ())?
+    fileprivate var cbManager: CBCentralManager?
+    fileprivate var didConnectCompletionHandler: (() -> ())?
+    fileprivate var didDisconnectCompletionHandler: (() -> ())?
+    fileprivate var didDiscoverServicesCompletionHandler: (() -> ())?
+    fileprivate var didDiscoverCharacteristicsCompletionHandler: (() -> ())?
+    fileprivate var didUpdateValue: (() -> ())?
     
     weak var delegate: BLEManagerDelegate?
     
@@ -43,29 +47,29 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     }
     
     func scan() {
-        cbManager?.scanForPeripheralsWithServices(nil, options: nil)
+        cbManager?.scanForPeripherals(withServices: nil, options: nil)
     }
     
     func stopScan() {
         cbManager?.stopScan()
     }
     
-    func connect(peripheral: CBPeripheral, completionHandler: () -> ()) {
+    func connect(_ peripheral: CBPeripheral, completionHandler: @escaping () -> ()) {
         connectedPeripheral = peripheral
-        cbManager?.connectPeripheral(peripheral, options: nil)
+        cbManager?.connect(peripheral, options: nil)
         
         didConnectCompletionHandler = completionHandler
     }
     
-    func disconnect(peripheral: CBPeripheral) {
+    func disconnect(_ peripheral: CBPeripheral) {
         cbManager?.cancelPeripheralConnection(peripheral)
     }
     
-    func discoverServices(completionHandler: () -> ()) {
+    func discoverServices(_ completionHandler: @escaping () -> ()) {
         didDiscoverServicesCompletionHandler = completionHandler
         
         if let peripheral = connectedPeripheral {
-            if peripheral.state == .Disconnected {
+            if peripheral.state == .disconnected {
                 connect(peripheral) {
                     peripheral.discoverServices(nil)
                 }
@@ -77,23 +81,23 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
         }
     }
     
-    func discoverCharacteristics(service: CBService, completionHandler: () -> ()) {
+    func discoverCharacteristics(_ service: CBService, completionHandler: @escaping () -> ()) {
         didDiscoverCharacteristicsCompletionHandler = completionHandler
         
         if let p = connectedPeripheral {
-            if p.state == .Connected {
-                p.discoverCharacteristics(nil, forService: service)
+            if p.state == .connected {
+                p.discoverCharacteristics(nil, for: service)
             }
         }
     }
     
-    func updateValue(characteristic: CBCharacteristic, completionHandler: () -> ()) {
+    func updateValue(_ characteristic: CBCharacteristic, completionHandler: @escaping () -> ()) {
         didUpdateValue = completionHandler
         
         if let p = connectedPeripheral {
-            if p.state == .Connected {
-                if characteristic.properties.contains(.Read) {
-                    p.readValueForCharacteristic(characteristic)
+            if p.state == .connected {
+                if characteristic.properties.contains(.read) {
+                    p.readValue(for: characteristic)
                 }
             }
         }
@@ -101,7 +105,7 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     
     //--------------- CBCentralManagerDelegate
     
-    func centralManager(central: CBCentralManager, didConnectPeripheral peripheral: CBPeripheral) {
+    func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         peripheral.delegate = self
         
         if let connectedHandler = didConnectCompletionHandler {
@@ -111,7 +115,7 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
         peripheral.discoverServices(nil)
     }
     
-    func centralManager(central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: NSError?) {
+    func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
         connectedPeripheral = nil
         
         if let disconnectHandler = didDisconnectCompletionHandler {
@@ -121,27 +125,27 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
         delegate?.didDisconnectPeripheral(self, peripheral: peripheral)
     }
     
-    func centralManager(central: CBCentralManager, didFailToConnectPeripheral peripheral: CBPeripheral, error: NSError?) {
+    func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
         // ### Closure
     }
     
-    func centralManagerDidUpdateState(central: CBCentralManager) {
-        if central.state == .PoweredOff {
+    func centralManagerDidUpdateState(_ central: CBCentralManager) {
+        if central.state == .poweredOff {
             print("Core BLE powered off")
             delegate?.didPoweredOff(self)
-        } else if central.state == .PoweredOn {
+        } else if central.state == .poweredOn {
             print("Core BLE powered on")
             delegate?.didPoweredOn(self)
-        } else if (central.state == .Unauthorized) {
+        } else if (central.state == .unauthorized) {
             print("Core BLE unauthorized")
-        } else if (central.state == .Unknown) {
+        } else if (central.state == .unknown) {
             print("Core BLE state unknown")
-        } else if (central.state == .Unsupported) {
+        } else if (central.state == .unsupported) {
             print("Core BLE state unsuppored")
         }
     }
     
-    func centralManager(central: CBCentralManager, didDiscoverPeripheral peripheral: CBPeripheral, advertisementData: [String : AnyObject], RSSI: NSNumber) {
+    func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
         print("Discovered \(peripheral.name)")
         print("RSSI: \(RSSI)")
         
@@ -154,15 +158,15 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
             localName = name
         }
         
-        if let serviceData = advertisementData[CBAdvertisementDataServiceDataKey] as? [CBUUID:  NSData] {
+        if let serviceData = advertisementData[CBAdvertisementDataServiceDataKey] as? [CBUUID:  Data] {
             for (uuid, service) in serviceData {
-                print("uuid: \(uuid.UUIDString), service data: \(service)")
+                print("uuid: \(uuid.uuidString), service data: \(service)")
             }
         }
         
         if let dataServiceUUIDs = advertisementData[CBAdvertisementDataServiceUUIDsKey] as? [CBUUID] {
             for uuid in dataServiceUUIDs {
-                print("service uuid: \(uuid.UUIDString)")
+                print("service uuid: \(uuid.uuidString)")
             }
         }
         
@@ -177,7 +181,7 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     
     // ------------------ CBPeripheralDelegate ------------------
     
-    func peripheral(peripheral: CBPeripheral, didDiscoverServices error: NSError?) {
+    func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
         if error == nil {
             print("Discovered services...")
             
@@ -187,9 +191,9 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
         }
     }
     
-    func peripheral(peripheral: CBPeripheral, didDiscoverCharacteristicsForService service: CBService, error: NSError?) {
+    func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
         if error == nil {
-            print("Discovered charactetistics for the service \(service.UUID.UUIDString)")
+            print("Discovered charactetistics for the service \(service.uuid.uuidString)")
             
             if let handler = didDiscoverCharacteristicsCompletionHandler {
                 handler()
@@ -197,7 +201,7 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
         }
     }
     
-    func peripheral(peripheral: CBPeripheral, didUpdateValueForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
+    func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
         
         if error == nil {
             print(characteristic.value)
