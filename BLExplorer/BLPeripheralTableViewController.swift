@@ -67,7 +67,7 @@ class BLPeripheralTableViewController: UITableViewController, BLEManagerDelegate
         if segue.identifier == "ServicesSegue" {
             if let servicesTableViewController = segue.destination as? BLServicesTableViewController {
                 servicesTableViewController.delegate? = self
-                servicesTableViewController.bleManager? = bleManager!
+                servicesTableViewController.bleManager = bleManager!
                 
                 // ### TODO: Switch delegate???
                 servicesTableViewController.bleManager?.delegate = servicesTableViewController

@@ -33,8 +33,22 @@ class BLServicesTableViewController: UITableViewController, BLEManagerDelegate, 
         super.viewDidLoad()
         
         self.navigationItem.title = "Services"
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         
-        // ### TODO: Discover Services
+        discoverServices()
+    }
+    
+    func discoverServices() {
+        bleManager?.discoverServices {
+            if let discoveredServices = self.bleManager?.connectedPeripheral?.services {
+                self.services = discoveredServices
+            }
+            
+            self.tableView.reloadData()
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
