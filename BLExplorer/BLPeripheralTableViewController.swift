@@ -24,6 +24,7 @@ class BLPeripheralTableViewController: UITableViewController, BLEManagerDelegate
         super.viewDidLoad()
         
         bleManager = BLEManager()
+        bleManager?.delegate = self
     }
     
     // ---------------- BLEManagerDelegate ---------------------------
