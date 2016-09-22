@@ -28,10 +28,8 @@ protocol BLCharacteristicsDelegate : class {
     func finishedShowing(_ controller: BLCharacteristicsTableViewController)
 }
 
-class BLCharacteristicsTableViewController: UITableViewController, CBPeripheralDelegate, CBCentralManagerDelegate {
-    var cbManager: CBCentralManager?
-    var cbPeripheral: CBPeripheral?
-    var cbService: CBService?
+class BLCharacteristicsTableViewController: UITableViewController, CBPeripheralDelegate {
+    var bleManager: BLEManager?
     var characteristics = [CBCharacteristic]()
     
     weak var delegate: BLCharacteristicsDelegate?
@@ -40,9 +38,12 @@ class BLCharacteristicsTableViewController: UITableViewController, CBPeripheralD
         super.viewDidLoad()
         
         navigationItem.title = "Characteristics"
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         
         characteristics = []
-        cbPeripheral?.discoverCharacteristics(nil, for: cbService!)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -65,19 +66,6 @@ class BLCharacteristicsTableViewController: UITableViewController, CBPeripheralD
         cell.textLabel?.text = characteristics[(indexPath as NSIndexPath).row].value?.toHexString()
         
         return cell
-    }
-    
-    //  ------------ CBCentralManagerDelegate --------
-    func centralManagerDidUpdateState(_ central: CBCentralManager) {
-        // unused
-    }
-    
-    func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
-        // unused
-    }
-    
-    func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
-        print("Disconnected from \(peripheral.name)")
     }
     
     //--------------- CBPeripheralDelegate -------------
