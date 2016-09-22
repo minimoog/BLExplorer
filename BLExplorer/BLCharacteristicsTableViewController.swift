@@ -30,6 +30,7 @@ protocol BLCharacteristicsDelegate : class {
 
 class BLCharacteristicsTableViewController: UITableViewController, CBPeripheralDelegate {
     var bleManager: BLEManager?
+    var service: CBService?
     var characteristics = [CBCharacteristic]()
     
     weak var delegate: BLCharacteristicsDelegate?
@@ -44,6 +45,19 @@ class BLCharacteristicsTableViewController: UITableViewController, CBPeripheralD
         super.viewDidAppear(animated)
         
         characteristics = []
+        
+        bleManager?.discoverCharacteristics(service!) {
+            if let ch = self.service?.characteristics {
+                self.characteristics = ch
+            }
+            
+            self.characteristics.forEach {
+                self.bleManager?.updateValue($0) {
+                }
+            }
+            
+            self.tableView.reloadData()
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -67,18 +81,4 @@ class BLCharacteristicsTableViewController: UITableViewController, CBPeripheralD
         
         return cell
     }
-
-    /*
-    func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
-        tableView.beginUpdates()
-        
-        characteristics.append(characteristic)
-        
-        let indexPath = IndexPath(row: characteristics.count - 1, section: 0)
-        tableView.insertRows(at: [indexPath], with: .none)
-        
-        tableView.endUpdates()
-    }
- */
- 
 }

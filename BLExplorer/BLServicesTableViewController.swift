@@ -56,8 +56,8 @@ class BLServicesTableViewController: UITableViewController, BLEManagerDelegate, 
             if let characteristicsTableViewController = segue.destination as? BLCharacteristicsTableViewController {
                 
                 if let indexPath = tableView.indexPathForSelectedRow {
-                    //characteristicsTableViewController.cbPeripheral = peripheral
-                    characteristicsTableViewController.cbService = services[(indexPath as NSIndexPath).row]
+                    characteristicsTableViewController.bleManager = bleManager
+                    characteristicsTableViewController.service = services[(indexPath as NSIndexPath).row]
                     
                     characteristicsTableViewController.delegate? = self
                 }
