@@ -99,20 +99,6 @@ class BLServicesTableViewController: UITableViewController, BLEManagerDelegate, 
         performSegue(withIdentifier: "CharacteristicsSegue", sender: self)
     }
     
-    // ------------ CBPeripheralDelegate -----------
-    
-    func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: NSError?) {
-        if error == nil {
-            print("Discovered services...")
-            
-            if let discoveredServices = peripheral.services {
-                services = discoveredServices
-            }
-            
-            tableView.reloadData()
-        }
-    }
-    
     // ------------- BLEManagerDelegate ------------
     func didDisconnectPeripheral(_ manager: BLEManager, peripheral: CBPeripheral) {
         
