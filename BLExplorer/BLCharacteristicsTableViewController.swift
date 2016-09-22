@@ -67,23 +67,8 @@ class BLCharacteristicsTableViewController: UITableViewController, CBPeripheralD
         
         return cell
     }
-    
-    //--------------- CBPeripheralDelegate -------------
-    func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
-        if error == nil {
-            print("Discovered charactetistics for the service \(service.uuid.uuidString)")
-            
-            if let characteristics = service.characteristics {
-                for ch in characteristics {
-                    let properties = ch.properties
-                    if properties.contains(.read) {
-                        peripheral.readValue(for: ch)
-                    }
-                }
-            }
-        }
-    }
-    
+
+    /*
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
         tableView.beginUpdates()
         
@@ -94,4 +79,6 @@ class BLCharacteristicsTableViewController: UITableViewController, CBPeripheralD
         
         tableView.endUpdates()
     }
+ */
+ 
 }
