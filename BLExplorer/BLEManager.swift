@@ -47,6 +47,7 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     }
     
     func scan() {
+        print("Start scanning...")
         cbManager?.scanForPeripherals(withServices: nil, options: nil)
     }
     
@@ -61,8 +62,10 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
         didConnectCompletionHandler = completionHandler
     }
     
-    func disconnect(_ peripheral: CBPeripheral) {
-        cbManager?.cancelPeripheralConnection(peripheral)
+    func disconnect() {
+        if let peripheral = connectedPeripheral {
+            cbManager?.cancelPeripheralConnection(peripheral)
+        }
     }
     
     func discoverServices(_ completionHandler: @escaping () -> ()) {
@@ -114,11 +117,15 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     }
     
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
+        print("Disconnected: \(peripheral)")
+        
         connectedPeripheral = nil
         
         if let disconnectHandler = didDisconnectCompletionHandler {
             disconnectHandler()
         }
+        
+        
         
         delegate?.didDisconnectPeripheral(self, peripheral: peripheral)
     }

@@ -58,7 +58,8 @@ class BLPeripheralTableViewController: UITableViewController, BLEManagerDelegate
     func finishedShowing(_ controller: BLServicesTableViewController) {
         bleManager?.delegate = self
         
-        //cbManager?.cancelPeripheralConnection(peripheral)
+        //start again scanning
+        bleManager?.scan()
     }
     
     // --------------- Segue --------------------
@@ -66,11 +67,15 @@ class BLPeripheralTableViewController: UITableViewController, BLEManagerDelegate
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "ServicesSegue" {
             if let servicesTableViewController = segue.destination as? BLServicesTableViewController {
-                servicesTableViewController.delegate? = self
+                //stop scanning
+                bleManager?.stopScan()
+                peripherals = []
+                
+                servicesTableViewController.delegate = self
                 servicesTableViewController.bleManager = bleManager!
                 
-                // ### TODO: Switch delegate???
                 servicesTableViewController.bleManager?.delegate = servicesTableViewController
+                
             }
         }
     }
