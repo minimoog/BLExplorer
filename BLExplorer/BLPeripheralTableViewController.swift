@@ -38,6 +38,13 @@ class BLPeripheralTableViewController: UITableViewController, BLEManagerDelegate
         peripheralWithExtraData.localName = localName
         peripheralWithExtraData.isConnectable = isConnectable
         
+        if peripherals.contains(where: {
+            per in
+            return per.localName == peripheralWithExtraData.localName
+        }) {
+            return
+        }
+        
         peripherals.append(peripheralWithExtraData)
         
         tableView.reloadData()
