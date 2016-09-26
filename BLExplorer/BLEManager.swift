@@ -90,7 +90,11 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
         didDiscoverCharacteristicsCompletionHandler = completionHandler
         
         if let p = connectedPeripheral {
-            if p.state == .connected {
+            if p.state == .disconnected {
+                connect(p) {
+                    p.discoverCharacteristics(nil, for: service)
+                }
+            } else if p.state == .connected {
                 p.discoverCharacteristics(nil, for: service)
             }
         }
