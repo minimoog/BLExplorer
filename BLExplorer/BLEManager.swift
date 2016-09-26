@@ -79,6 +79,8 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
             } else {
                 if peripheral.services == nil {
                     peripheral.discoverServices(nil)
+                } else if let handler = didDiscoverServicesCompletionHandler {
+                    handler()
                 }
             }
         }

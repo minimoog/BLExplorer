@@ -75,7 +75,7 @@ class BLServicesTableViewController: UITableViewController, BLEManagerDelegate, 
     
     // --------------- BLCharacteristicsTableViewController-----------
     func finishedShowing(_ controller: BLCharacteristicsTableViewController) {
-        //peripheral?.delegate = self
+        bleManager?.delegate = self
     }
     
     // ------------ Table view --------------
