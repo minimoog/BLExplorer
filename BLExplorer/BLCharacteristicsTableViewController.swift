@@ -78,6 +78,7 @@ class BLCharacteristicsTableViewController: UITableViewController, CBPeripheralD
         let cell = tableView.dequeueReusableCell(withIdentifier: "CharacteristicCell", for: indexPath)
         
         cell.textLabel?.text = characteristics[(indexPath as NSIndexPath).row].value?.toHexString()
+        cell.detailTextLabel?.text = characteristics[indexPath.row].uuid.uuidString
         
         return cell
     }
