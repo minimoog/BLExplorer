@@ -18,14 +18,12 @@ protocol BLEManagerDelegate : class {
 
 extension BLEManagerDelegate {
     func didDiscoverPeripheral(_ manager: BLEManager, peripheral: CBPeripheral, localName: String?, isConnectable: Bool?) {
-        
     }
     
     func didPoweredOn(_ manager: BLEManager) {
     }
     
     func didPoweredOff(_ manager: BLEManager) {
-        
     }
 }
 
@@ -72,11 +70,7 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
         didDiscoverServicesCompletionHandler = completionHandler
         
         if let peripheral = connectedPeripheral {
-            if peripheral.state == .disconnected {
-                connect(peripheral) {
-                    peripheral.discoverServices(nil)
-                }
-            } else {
+            if peripheral.state == .connected {
                 if peripheral.services == nil {
                     peripheral.discoverServices(nil)
                 } else if let handler = didDiscoverServicesCompletionHandler {
@@ -90,12 +84,12 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
         didDiscoverCharacteristicsCompletionHandler = completionHandler
         
         if let p = connectedPeripheral {
-            if p.state == .disconnected {
-                connect(p) {
+            if p.state == .connected {
+                if service.characteristics == nil {
                     p.discoverCharacteristics(nil, for: service)
+                } else if let handler = didDiscoverCharacteristicsCompletionHandler {
+                    handler()
                 }
-            } else if p.state == .connected {
-                p.discoverCharacteristics(nil, for: service)
             }
         }
     }
@@ -130,8 +124,6 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
         if let disconnectHandler = didDisconnectCompletionHandler {
             disconnectHandler()
         }
-        
-        
         
         delegate?.didDisconnectPeripheral(self, peripheral: peripheral)
     }
