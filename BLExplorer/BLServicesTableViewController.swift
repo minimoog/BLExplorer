@@ -87,7 +87,11 @@ class BLServicesTableViewController: UITableViewController, BLEManagerDelegate, 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ServiceCell", for: indexPath)
         
-        cell.textLabel?.text = services[(indexPath as NSIndexPath).row].uuid.uuidString
+        if let serviceName = StandardServices[services[indexPath.row].uuid]  {
+            cell.textLabel?.text = serviceName
+        } else {
+            cell.textLabel?.text = services[(indexPath as NSIndexPath).row].uuid.uuidString
+        }
         
         //disable included services for now services for now
         cell.enable(services[(indexPath as NSIndexPath).row].isPrimary)
