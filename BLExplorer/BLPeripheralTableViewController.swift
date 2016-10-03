@@ -60,7 +60,10 @@ class BLPeripheralTableViewController: UITableViewController, BLEManagerDelegate
     func didPoweredOn(_ manager: BLEManager) {
         bleManager?.scan()
     }
-        
+    
+    func didPoweredOff(_ manager: BLEManager) {
+    }
+    
     // --------------- BLServicesTableViewController-----------
     func finishedShowing(_ controller: BLServicesTableViewController) {
         bleManager?.delegate = self

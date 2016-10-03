@@ -14,6 +14,7 @@
 		526062071B68079500801E06 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 526062061B68079500801E06 /* Assets.xcassets */; };
 		526062121B6807BC00801E06 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 526062111B6807BC00801E06 /* CoreBluetooth.framework */; };
 		5261C37C1D1B284400185498 /* BLPeripheralTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5261C37B1D1B284400185498 /* BLPeripheralTableViewController.swift */; };
+		529479501DA314FA001DF46D /* StandardCharacteristics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5294794F1DA314FA001DF46D /* StandardCharacteristics.swift */; };
 		52B683511D9B39C700117E2B /* StandardServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52B683501D9B39C700117E2B /* StandardServices.swift */; };
 		52DFCE811D481F7B008DD1BF /* BLEManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52DFCE801D481F7B008DD1BF /* BLEManager.swift */; };
 /* End PBXBuildFile section */
@@ -28,6 +29,7 @@
 		5260620B1B68079500801E06 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		526062111B6807BC00801E06 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 		5261C37B1D1B284400185498 /* BLPeripheralTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLPeripheralTableViewController.swift; sourceTree = "<group>"; };
+		5294794F1DA314FA001DF46D /* StandardCharacteristics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StandardCharacteristics.swift; sourceTree = "<group>"; };
 		52B683501D9B39C700117E2B /* StandardServices.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StandardServices.swift; sourceTree = "<group>"; };
 		52DFCE801D481F7B008DD1BF /* BLEManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -73,6 +75,7 @@
 				5245F0DE1D1C92F300876EA5 /* BLServicesTableViewController.swift */,
 				52590EC21D24756D00511194 /* BLCharacteristicsTableViewController.swift */,
 				52B683501D9B39C700117E2B /* StandardServices.swift */,
+				5294794F1DA314FA001DF46D /* StandardCharacteristics.swift */,
 			);
 			path = BLExplorer;
 			sourceTree = "<group>";
@@ -103,7 +106,7 @@
 		526061F41B68079500801E06 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0700;
+				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = "Antonie Jovanoski";
 				TargetAttributes = {
 					526061FB1B68079500801E06 = {
@@ -148,6 +151,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				529479501DA314FA001DF46D /* StandardCharacteristics.swift in Sources */,
 				52B683511D9B39C700117E2B /* StandardServices.swift in Sources */,
 				5245F0DF1D1C92F300876EA5 /* BLServicesTableViewController.swift in Sources */,
 				5261C37C1D1B284400185498 /* BLPeripheralTableViewController.swift in Sources */,
@@ -184,8 +188,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -207,7 +213,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -229,8 +235,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -246,9 +254,10 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
