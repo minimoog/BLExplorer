@@ -77,7 +77,7 @@ class BLCharacteristicsTableViewController: UITableViewController, CBPeripheralD
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CharacteristicCell", for: indexPath)
         
-        cell.textLabel?.text = characteristics[(indexPath as NSIndexPath).row].value?.toHexString()
+        cell.textLabel?.text = characteristics[indexPath.row].value?.toHexString()
         
         if let characteristicsName = StandardCharacteristics[characteristics[indexPath.row].uuid] {
             cell.detailTextLabel?.text = characteristicsName

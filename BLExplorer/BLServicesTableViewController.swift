@@ -90,11 +90,11 @@ class BLServicesTableViewController: UITableViewController, BLEManagerDelegate, 
         if let serviceName = StandardServices[services[indexPath.row].uuid]  {
             cell.textLabel?.text = serviceName
         } else {
-            cell.textLabel?.text = services[(indexPath as NSIndexPath).row].uuid.uuidString
+            cell.textLabel?.text = services[indexPath.row].uuid.uuidString
         }
         
         //disable included services for now services for now
-        cell.enable(services[(indexPath as NSIndexPath).row].isPrimary)
+        cell.enable(services[indexPath.row].isPrimary)
         
         return cell
     }

@@ -99,14 +99,14 @@ class BLPeripheralTableViewController: UITableViewController, BLEManagerDelegate
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "PeripheralCell", for: indexPath)
         
-        cell.textLabel?.text = peripherals[(indexPath as NSIndexPath).row].peripheral.name
-        cell.detailTextLabel?.text = peripherals[(indexPath as NSIndexPath).row].localName
+        cell.textLabel?.text = peripherals[indexPath.row].peripheral.name
+        cell.detailTextLabel?.text = peripherals[indexPath.row].localName
         
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        bleManager?.connect(peripherals[(indexPath as NSIndexPath).row].peripheral) {
+        bleManager?.connect(peripherals[indexPath.row].peripheral) {
             self.performSegue(withIdentifier: "ServicesSegue", sender: self)
         }
     }
