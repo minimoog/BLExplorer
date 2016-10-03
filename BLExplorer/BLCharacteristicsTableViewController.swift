@@ -80,7 +80,7 @@ class BLCharacteristicsTableViewController: UITableViewController, CBPeripheralD
         cell.textLabel?.text = characteristics[(indexPath as NSIndexPath).row].value?.toHexString()
         
         if let characteristicsName = StandardCharacteristics[characteristics[indexPath.row].uuid] {
-           cell.detailTextLabel?.text = characteristicsName
+            cell.detailTextLabel?.text = characteristicsName
         } else {
             cell.detailTextLabel?.text = characteristics[indexPath.row].uuid.uuidString
         }
