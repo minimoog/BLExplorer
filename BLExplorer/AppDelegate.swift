@@ -15,7 +15,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        
+        let bleManager = BLEManager()
+        
+        let viewController = (window?.rootViewController as? UINavigationController)?.viewControllers[0] as! BLPeripheralTableViewController
+        
+        viewController.bleManager = bleManager
+        
         return true
     }
 

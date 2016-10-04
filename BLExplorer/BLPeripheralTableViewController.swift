@@ -23,7 +23,6 @@ class BLPeripheralTableViewController: UITableViewController, BLEManagerDelegate
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        bleManager = BLEManager()
         bleManager?.delegate = self
     }
     
