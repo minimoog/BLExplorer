@@ -79,6 +79,7 @@ class BLPeripheralTableViewController: UITableViewController, BLEManagerDelegate
                 //stop scanning
                 bleManager?.stopScan()
                 peripherals = []
+                tableView.reloadData()
                 
                 servicesTableViewController.delegate = self
                 servicesTableViewController.bleManager = bleManager!
