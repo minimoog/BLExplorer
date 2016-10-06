@@ -105,7 +105,7 @@ class BLServicesTableViewController: UITableViewController, BLEManagerDelegate, 
     
     // ------------- BLEManagerDelegate ------------
     func didDisconnectPeripheral(_ manager: BLEManager, peripheral: CBPeripheral) {
-        let ac = UIAlertController(title: "Disconnected", message: nil, preferredStyle: .actionSheet)
+        let ac = UIAlertController(title: "Disconnected", message: nil, preferredStyle: .alert)
         ac.addAction(UIAlertAction(title: "OK", style: .default))
         
         if let presenter = ac.popoverPresentationController {
