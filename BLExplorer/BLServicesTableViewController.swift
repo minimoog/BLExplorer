@@ -105,6 +105,17 @@ class BLServicesTableViewController: UITableViewController, BLEManagerDelegate, 
     
     // ------------- BLEManagerDelegate ------------
     func didDisconnectPeripheral(_ manager: BLEManager, peripheral: CBPeripheral) {
+        let ac = UIAlertController(title: "Disconnected", message: nil, preferredStyle: .actionSheet)
+        ac.addAction(UIAlertAction(title: "OK", style: .default))
         
+        if let presenter = ac.popoverPresentationController {
+            presenter.sourceView = self.view
+            presenter.sourceRect = CGRect(x: self.view.bounds.size.width / 2.0, y: self.view.bounds.size.height / 2.0, width: 1.0, height: 1.0)
+        }
+        
+        services = []
+        tableView.reloadData()
+        
+        present(ac, animated: true)
     }
 }
