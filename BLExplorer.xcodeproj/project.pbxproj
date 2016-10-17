@@ -15,6 +15,7 @@
 		526062121B6807BC00801E06 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 526062111B6807BC00801E06 /* CoreBluetooth.framework */; };
 		5261C37C1D1B284400185498 /* BLPeripheralTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5261C37B1D1B284400185498 /* BLPeripheralTableViewController.swift */; };
 		529479501DA314FA001DF46D /* StandardCharacteristics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5294794F1DA314FA001DF46D /* StandardCharacteristics.swift */; };
+		529479521DB58981001DF46D /* CharacteristicTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 529479511DB58981001DF46D /* CharacteristicTableViewCell.swift */; };
 		52B683511D9B39C700117E2B /* StandardServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52B683501D9B39C700117E2B /* StandardServices.swift */; };
 		52DFCE811D481F7B008DD1BF /* BLEManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52DFCE801D481F7B008DD1BF /* BLEManager.swift */; };
 /* End PBXBuildFile section */
@@ -30,6 +31,7 @@
 		526062111B6807BC00801E06 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 		5261C37B1D1B284400185498 /* BLPeripheralTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLPeripheralTableViewController.swift; sourceTree = "<group>"; };
 		5294794F1DA314FA001DF46D /* StandardCharacteristics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StandardCharacteristics.swift; sourceTree = "<group>"; };
+		529479511DB58981001DF46D /* CharacteristicTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CharacteristicTableViewCell.swift; sourceTree = "<group>"; };
 		52B683501D9B39C700117E2B /* StandardServices.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StandardServices.swift; sourceTree = "<group>"; };
 		52DFCE801D481F7B008DD1BF /* BLEManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -76,6 +78,7 @@
 				52590EC21D24756D00511194 /* BLCharacteristicsTableViewController.swift */,
 				52B683501D9B39C700117E2B /* StandardServices.swift */,
 				5294794F1DA314FA001DF46D /* StandardCharacteristics.swift */,
+				529479511DB58981001DF46D /* CharacteristicTableViewCell.swift */,
 			);
 			path = BLExplorer;
 			sourceTree = "<group>";
@@ -151,6 +154,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				529479521DB58981001DF46D /* CharacteristicTableViewCell.swift in Sources */,
 				529479501DA314FA001DF46D /* StandardCharacteristics.swift in Sources */,
 				52B683511D9B39C700117E2B /* StandardServices.swift in Sources */,
 				5245F0DF1D1C92F300876EA5 /* BLServicesTableViewController.swift in Sources */,
