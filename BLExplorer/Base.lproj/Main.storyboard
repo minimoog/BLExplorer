@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -58,40 +59,51 @@
         <scene sceneID="zn8-M2-u93">
             <objects>
                 <tableViewController id="lFq-8c-OIM" customClass="BLCharacteristicsTableViewController" customModule="BLExplorer" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="106" sectionHeaderHeight="28" sectionFooterHeight="28" id="aSH-8g-AyE">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="101" sectionHeaderHeight="28" sectionFooterHeight="28" id="aSH-8g-AyE">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="CharacteristicCell" rowHeight="106" id="AxX-sI-0v5" customClass="CharacteristicTableViewCell" customModule="BLExplorer" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="92" width="375" height="106"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="CharacteristicCell" rowHeight="100" id="AxX-sI-0v5" customClass="CharacteristicTableViewCell" customModule="BLExplorer" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="92" width="375" height="100"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="AxX-sI-0v5" id="meE-IT-ap1">
-                                    <frame key="frameInset" width="375" height="105"/>
+                                    <frame key="frameInset" width="375" height="99"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Characteristic name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2rC-Fg-Oj6">
-                                            <frame key="frameInset" minX="8" minY="8" width="190" height="21"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Characteristic name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2rC-Fg-Oj6">
                                             <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Characteristivs string value" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jkd-HT-2U0">
-                                            <frame key="frameInset" minX="8" minY="37" width="221" height="21"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Characteristivs string value" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jkd-HT-2U0">
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Characteristics hex value" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DC5-30-4Gk">
-                                            <frame key="frameInset" minX="8" minY="66" width="221" height="21"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Characteristics hex value" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DC5-30-4Gk">
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="21" id="bIi-JD-Ex8"/>
+                                            </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
+                                    <constraints>
+                                        <constraint firstItem="DC5-30-4Gk" firstAttribute="leading" secondItem="2rC-Fg-Oj6" secondAttribute="leading" id="1eS-Al-ydF"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="2rC-Fg-Oj6" secondAttribute="trailing" id="5vW-UB-WZX"/>
+                                        <constraint firstItem="DC5-30-4Gk" firstAttribute="leading" secondItem="jkd-HT-2U0" secondAttribute="leading" id="7h2-et-UcW"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="DC5-30-4Gk" secondAttribute="bottom" constant="4" id="AaL-WY-iVH"/>
+                                        <constraint firstItem="2rC-Fg-Oj6" firstAttribute="centerX" secondItem="meE-IT-ap1" secondAttribute="centerX" id="I0y-7v-6UO"/>
+                                        <constraint firstItem="DC5-30-4Gk" firstAttribute="top" secondItem="jkd-HT-2U0" secondAttribute="bottom" constant="8" symbolic="YES" id="JxZ-kz-5hw"/>
+                                        <constraint firstAttribute="topMargin" secondItem="2rC-Fg-Oj6" secondAttribute="top" id="K1W-FA-qlJ"/>
+                                        <constraint firstAttribute="leadingMargin" secondItem="2rC-Fg-Oj6" secondAttribute="leading" id="WH9-ED-YNs"/>
+                                        <constraint firstItem="DC5-30-4Gk" firstAttribute="top" secondItem="jkd-HT-2U0" secondAttribute="bottom" constant="8" id="ZwB-Vn-l87"/>
+                                        <constraint firstItem="DC5-30-4Gk" firstAttribute="trailing" secondItem="jkd-HT-2U0" secondAttribute="trailing" id="ehy-vq-TQr"/>
+                                        <constraint firstItem="jkd-HT-2U0" firstAttribute="top" secondItem="2rC-Fg-Oj6" secondAttribute="bottom" constant="8" id="qS7-4q-pgU"/>
+                                        <constraint firstItem="jkd-HT-2U0" firstAttribute="centerX" secondItem="meE-IT-ap1" secondAttribute="centerX" id="uWf-kx-bty"/>
+                                    </constraints>
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="hexValue" destination="DC5-30-4Gk" id="oEs-be-jUR"/>
