@@ -84,6 +84,9 @@ class BLCharacteristicsTableViewController: UITableViewController, CBPeripheralD
         if let value = characteristics[indexPath.row].value {
             cell.stringValue.text = value.toUtf8String()
             cell.hexValue.text = value.toHexString()
+        } else {
+            cell.stringValue.text = ""
+            cell.hexValue.text = ""
         }
         
         if let characteristicsName = StandardCharacteristics[characteristics[indexPath.row].uuid] {
