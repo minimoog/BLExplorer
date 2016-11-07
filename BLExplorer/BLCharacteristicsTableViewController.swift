@@ -50,6 +50,10 @@ class BLCharacteristicsTableViewController: UITableViewController, CBPeripheralD
         
         characteristics = []
         
+        if let uuid = service?.uuid.uuidString {
+            navigationItem.title = "Characteristics of " + uuid
+        }
+        
         bleManager?.discoverCharacteristics(service!) {
             if let ch = self.service?.characteristics {
                 self.characteristics = ch

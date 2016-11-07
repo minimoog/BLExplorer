@@ -38,6 +38,10 @@ class BLServicesTableViewController: UITableViewController, BLEManagerDelegate, 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
+        if let name = bleManager?.connectedPeripheral?.name {
+            self.navigationItem.title = "Services of " + name
+        }
+        
         discoverServices()
     }
     
