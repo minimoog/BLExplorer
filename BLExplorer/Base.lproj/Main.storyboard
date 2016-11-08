@@ -162,6 +162,7 @@
                         </connections>
                     </tableView>
                     <connections>
+                        <outlet property="servicesTableView" destination="pqc-wt-RDb" id="3hG-EP-NaG"/>
                         <segue destination="lFq-8c-OIM" kind="show" identifier="CharacteristicsSegue" id="uLU-o5-7c9"/>
                     </connections>
                 </tableViewController>

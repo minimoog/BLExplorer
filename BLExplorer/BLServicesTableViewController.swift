@@ -23,7 +23,10 @@ protocol BLServicesDelegate : class {
     func finishedShowing(_ controller: BLServicesTableViewController)
 }
 
-class BLServicesTableViewController: UITableViewController, BLEManagerDelegate, BLCharacteristicsDelegate {
+class BLServicesTableViewController: UIViewController, BLEManagerDelegate, BLCharacteristicsDelegate, UITableViewDelegate, UITableViewDataSource {
+    
+    @IBOutlet var servicesTableView: UITableView!
+    
     var bleManager: BLEManager?
     var services = [CBService]()
     
@@ -33,6 +36,9 @@ class BLServicesTableViewController: UITableViewController, BLEManagerDelegate, 
         super.viewDidLoad()
         
         self.navigationItem.title = "Services"
+        
+        servicesTableView?.dataSource = self
+        servicesTableView?.delegate = self
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -51,7 +57,7 @@ class BLServicesTableViewController: UITableViewController, BLEManagerDelegate, 
                 self.services = discoveredServices
             }
             
-            self.tableView.reloadData()
+            self.servicesTableView?.reloadData()
         }
     }
     
@@ -59,7 +65,7 @@ class BLServicesTableViewController: UITableViewController, BLEManagerDelegate, 
         if segue.identifier == "CharacteristicsSegue" {
             if let characteristicsTableViewController = segue.destination as? BLCharacteristicsTableViewController {
                 
-                if let indexPath = tableView.indexPathForSelectedRow {
+                if let indexPath = servicesTableView?.indexPathForSelectedRow {
                     characteristicsTableViewController.bleManager = bleManager
                     characteristicsTableViewController.service = services[(indexPath as NSIndexPath).row]
                     
@@ -84,11 +90,11 @@ class BLServicesTableViewController: UITableViewController, BLEManagerDelegate, 
     
     // ------------ Table view --------------
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return services.count
     }
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ServiceCell", for: indexPath)
         
         if let serviceName = StandardServices[services[indexPath.row].uuid]  {
@@ -103,7 +109,7 @@ class BLServicesTableViewController: UITableViewController, BLEManagerDelegate, 
         return cell
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         performSegue(withIdentifier: "CharacteristicsSegue", sender: self)
     }
     
@@ -118,7 +124,7 @@ class BLServicesTableViewController: UITableViewController, BLEManagerDelegate, 
         }
         
         services = []
-        tableView.reloadData()
+        servicesTableView?.reloadData()
         
         present(ac, animated: true)
     }
