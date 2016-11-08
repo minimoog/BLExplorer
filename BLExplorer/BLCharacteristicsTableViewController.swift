@@ -32,7 +32,10 @@ protocol BLCharacteristicsDelegate : class {
     func finishedShowing(_ controller: BLCharacteristicsTableViewController)
 }
 
-class BLCharacteristicsTableViewController: UITableViewController, CBPeripheralDelegate {
+class BLCharacteristicsTableViewController: UIViewController, CBPeripheralDelegate, UITableViewDelegate, UITableViewDataSource {
+    
+    @IBOutlet var characteristicsTableView: UITableView!
+    
     var bleManager: BLEManager?
     var service: CBService?
     var characteristics = [CBCharacteristic]()
@@ -43,6 +46,9 @@ class BLCharacteristicsTableViewController: UITableViewController, CBPeripheralD
         super.viewDidLoad()
         
         navigationItem.title = "Characteristics"
+        
+        characteristicsTableView?.delegate = self
+        characteristicsTableView?.dataSource = self
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -64,7 +70,7 @@ class BLCharacteristicsTableViewController: UITableViewController, CBPeripheralD
                 }
             }
             
-            self.tableView.reloadData()
+            self.characteristicsTableView?.reloadData()
         }
     }
     
@@ -78,11 +84,11 @@ class BLCharacteristicsTableViewController: UITableViewController, CBPeripheralD
     
     // ------------ Table view --------------
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return characteristics.count
     }
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CharacteristicCell", for: indexPath) as! CharacteristicTableViewCell
         
         if let value = characteristics[indexPath.row].value {
