@@ -15,15 +15,19 @@ struct PeripheralWithExtraData {
     var isConnectable: Bool? = true
 }
 
-class BLPeripheralTableViewController: UITableViewController, BLEManagerDelegate, BLServicesDelegate
+class BLPeripheralTableViewController: UIViewController, BLEManagerDelegate, BLServicesDelegate, UITableViewDelegate, UITableViewDataSource
 {
     var bleManager: BLEManager?
     var peripherals = [PeripheralWithExtraData]()
+    @IBOutlet var peripheralsTableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         bleManager?.delegate = self
+        
+        peripheralsTableView?.delegate = self
+        peripheralsTableView?.dataSource = self
     }
     
     // ---------------- BLEManagerDelegate ---------------------------
@@ -46,7 +50,7 @@ class BLPeripheralTableViewController: UITableViewController, BLEManagerDelegate
         
         peripherals.append(peripheralWithExtraData)
         
-        tableView.reloadData()
+        peripheralsTableView?.reloadData()
     }
     
     func didDisconnectPeripheral(_ manager: BLEManager, peripheral: CBPeripheral) {
@@ -79,7 +83,7 @@ class BLPeripheralTableViewController: UITableViewController, BLEManagerDelegate
                 //stop scanning
                 bleManager?.stopScan()
                 peripherals = []
-                tableView.reloadData()
+                peripheralsTableView?.reloadData()
                 
                 servicesTableViewController.delegate = self
                 servicesTableViewController.bleManager = bleManager!
@@ -92,11 +96,11 @@ class BLPeripheralTableViewController: UITableViewController, BLEManagerDelegate
     
     // --------------- Table View ---------------
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return peripherals.count
     }
 
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "PeripheralCell", for: indexPath)
         
         cell.textLabel?.text = peripherals[indexPath.row].peripheral.name
@@ -105,7 +109,7 @@ class BLPeripheralTableViewController: UITableViewController, BLEManagerDelegate
         return cell
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         bleManager?.connect(peripherals[indexPath.row].peripheral) {
             self.performSegue(withIdentifier: "ServicesSegue", sender: self)
         }
