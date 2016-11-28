@@ -34,7 +34,7 @@ class BLPeripheralTableViewController: UIViewController, BLEManagerDelegate, BLS
     
     func didDiscoverPeripheral(_ manager: BLEManager, peripheral: CBPeripheral, localName: String?, isConnectable: Bool?) {
         
-        print("Discovered \(peripheral.name)")
+        //print("Discovered \(peripheral.name)")
         
         var peripheralWithExtraData = PeripheralWithExtraData(peripheral: peripheral, localName: "", isConnectable: true)
             
@@ -54,7 +54,7 @@ class BLPeripheralTableViewController: UIViewController, BLEManagerDelegate, BLS
     }
     
     func didDisconnectPeripheral(_ manager: BLEManager, peripheral: CBPeripheral) {
-        print("Disconnecting \(peripheral.name)")
+        //print("Disconnecting \(peripheral.name)")
         
         //### TODO: Rescan?
         //### TODO: Fail to connect handler

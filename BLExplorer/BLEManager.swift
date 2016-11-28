@@ -44,8 +44,7 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
         cbManager = CBCentralManager(delegate: self, queue: nil)
     }
     
-    func scan() {
-        print("Start scanning...")
+    func scan() {     
         cbManager?.scanForPeripherals(withServices: nil, options: nil)
     }
     
@@ -117,7 +116,7 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     }
     
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
-        print("Disconnected: \(peripheral)")
+        //print("Disconnected: \(peripheral)")
         
         connectedPeripheral = nil
         
@@ -134,48 +133,45 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
         if central.state == .poweredOff {
-            print("Core BLE powered off")
             delegate?.didPoweredOff(self)
         } else if central.state == .poweredOn {
-            print("Core BLE powered on")
             delegate?.didPoweredOn(self)
         } else if (central.state == .unauthorized) {
-            print("Core BLE unauthorized")
         } else if (central.state == .unknown) {
-            print("Core BLE state unknown")
         } else if (central.state == .unsupported) {
-            print("Core BLE state unsuppored")
         }
     }
     
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
-        print("Discovered \(peripheral.name)")
+        
+#if DEBUG
         print("RSSI: \(RSSI)")
+#endif
         
         var localName: String?
         var isConnectable: Bool?
         
         if let name = advertisementData[CBAdvertisementDataLocalNameKey] as? String {
-            print("Local name \(name)")
-            
             localName = name
         }
         
         if let serviceData = advertisementData[CBAdvertisementDataServiceDataKey] as? [CBUUID:  Data] {
             for (uuid, service) in serviceData {
+                #if DEBUG
                 print("uuid: \(uuid.uuidString), service data: \(service)")
+                #endif
             }
         }
         
         if let dataServiceUUIDs = advertisementData[CBAdvertisementDataServiceUUIDsKey] as? [CBUUID] {
             for uuid in dataServiceUUIDs {
+                #if DEBUG
                 print("service uuid: \(uuid.uuidString)")
+                #endif
             }
         }
         
         if let connectable = advertisementData[CBAdvertisementDataIsConnectable] as? NSNumber {
-            print("is connectable: \(connectable.boolValue)")
-            
             isConnectable = connectable.boolValue
         }
         
@@ -186,8 +182,6 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     
     func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
         if error == nil {
-            print("Discovered services...")
-            
             if let discoverServicesHandler = didDiscoverServicesCompletionHandler {
                 discoverServicesHandler()
             }
@@ -196,7 +190,7 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     
     func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
         if error == nil {
-            print("Discovered charactetistics for the service \(service.uuid.uuidString)")
+            //print("Discovered charactetistics for the service \(service.uuid.uuidString)")
             
             if let handler = didDiscoverCharacteristicsCompletionHandler {
                 handler()
@@ -207,7 +201,7 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
         
         if error == nil {
-            print(characteristic.value)
+            //print(characteristic.value)
             
             if let handler = didUpdateValue {
                 handler()
