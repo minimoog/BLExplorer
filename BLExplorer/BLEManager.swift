@@ -35,7 +35,7 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     fileprivate var didDisconnectCompletionHandler: (() -> ())?
     fileprivate var didDiscoverServicesCompletionHandler: (() -> ())?
     fileprivate var didDiscoverCharacteristicsCompletionHandler: (() -> ())?
-    fileprivate var didUpdateValue: (() -> ())?
+    fileprivate var didUpdateValue: ((_ characteristic: CBCharacteristic, _ value: Data?) -> ())?
     
     weak var delegate: BLEManagerDelegate?
     
@@ -93,7 +93,7 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
         }
     }
     
-    func updateValue(_ characteristic: CBCharacteristic, completionHandler: @escaping () -> ()) {
+    func updateValue(_ characteristic: CBCharacteristic, completionHandler: @escaping (_ characteristic: CBCharacteristic, _ value: Data?) -> ()) {
         didUpdateValue = completionHandler
         
         if let p = connectedPeripheral {
@@ -204,7 +204,7 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
             //print(characteristic.value)
             
             if let handler = didUpdateValue {
-                handler()
+                handler(characteristic, characteristic.value)
             }
         }
     }
