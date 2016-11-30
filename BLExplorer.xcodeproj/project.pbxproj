@@ -18,6 +18,7 @@
 		529479521DB58981001DF46D /* CharacteristicTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 529479511DB58981001DF46D /* CharacteristicTableViewCell.swift */; };
 		52B683511D9B39C700117E2B /* StandardServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52B683501D9B39C700117E2B /* StandardServices.swift */; };
 		52DFCE811D481F7B008DD1BF /* BLEManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52DFCE801D481F7B008DD1BF /* BLEManager.swift */; };
+		52EF204F1DEF968D00763181 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 52EF204E1DEF968D00763181 /* Launch Screen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +35,7 @@
 		529479511DB58981001DF46D /* CharacteristicTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CharacteristicTableViewCell.swift; sourceTree = "<group>"; };
 		52B683501D9B39C700117E2B /* StandardServices.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StandardServices.swift; sourceTree = "<group>"; };
 		52DFCE801D481F7B008DD1BF /* BLEManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEManager.swift; sourceTree = "<group>"; };
+		52EF204E1DEF968D00763181 /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +81,7 @@
 				52B683501D9B39C700117E2B /* StandardServices.swift */,
 				5294794F1DA314FA001DF46D /* StandardCharacteristics.swift */,
 				529479511DB58981001DF46D /* CharacteristicTableViewCell.swift */,
+				52EF204E1DEF968D00763181 /* Launch Screen.storyboard */,
 			);
 			path = BLExplorer;
 			sourceTree = "<group>";
@@ -142,6 +145,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				52EF204F1DEF968D00763181 /* Launch Screen.storyboard in Resources */,
 				526062071B68079500801E06 /* Assets.xcassets in Resources */,
 				526062051B68079500801E06 /* Main.storyboard in Resources */,
 			);
