@@ -24,7 +24,11 @@ extension Data {
     }
     
     func toUtf8String() -> String {
-        return String(data: self, encoding: .utf8)!
+        if let utf8 = String(data: self, encoding: .utf8) {
+            return utf8
+        } else {
+            return String()
+        }
     }
 }
 
