@@ -12,15 +12,14 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    let bleManager = BLEManager()
+    var viewController: BLPeripheralTableViewController?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
-        let bleManager = BLEManager()
+        viewController = (window?.rootViewController as? UINavigationController)?.viewControllers[0] as? BLPeripheralTableViewController
         
-        let viewController = (window?.rootViewController as? UINavigationController)?.viewControllers[0] as! BLPeripheralTableViewController
-        
-        viewController.bleManager = bleManager
+        viewController?.bleManager = bleManager
         
         return true
     }
@@ -33,10 +32,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidEnterBackground(_ application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+        
+        bleManager.stopScan()
+        viewController?.clear()
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+        
+        bleManager.scan()
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {

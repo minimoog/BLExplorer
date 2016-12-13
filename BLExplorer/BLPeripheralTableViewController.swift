@@ -30,6 +30,11 @@ class BLPeripheralTableViewController: UIViewController, BLEManagerDelegate, BLS
         peripheralsTableView?.dataSource = self
     }
     
+    func clear() {
+        peripherals = []
+        peripheralsTableView?.reloadData()
+    }
+    
     // ---------------- BLEManagerDelegate ---------------------------
     
     func didDiscoverPeripheral(_ manager: BLEManager, peripheral: CBPeripheral, localName: String?, isConnectable: Bool?) {
