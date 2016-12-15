@@ -10,14 +10,14 @@ import Foundation
 import CoreBluetooth
 
 protocol BLEManagerDelegate : class {
-    func didDiscoverPeripheral(_ manager: BLEManager, peripheral: CBPeripheral, localName: String?, isConnectable: Bool?)
+    func didDiscoverPeripheral(_ manager: BLEManager, peripheral: CBPeripheral, localName: String?, rssi: NSNumber, isConnectable: Bool?)
     func didDisconnectPeripheral(_ manager: BLEManager, peripheral: CBPeripheral)
     func didPoweredOn(_ manager: BLEManager)
     func didPoweredOff(_ manager: BLEManager)
 }
 
 extension BLEManagerDelegate {
-    func didDiscoverPeripheral(_ manager: BLEManager, peripheral: CBPeripheral, localName: String?, isConnectable: Bool?) {
+    func didDiscoverPeripheral(_ manager: BLEManager, peripheral: CBPeripheral, localName: String?, rssi: NSNumber, isConnectable: Bool?) {
     }
     
     func didPoweredOn(_ manager: BLEManager) {
@@ -175,7 +175,7 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
             isConnectable = connectable.boolValue
         }
         
-        delegate?.didDiscoverPeripheral(self, peripheral: peripheral, localName: localName, isConnectable: isConnectable)
+        delegate?.didDiscoverPeripheral(self, peripheral: peripheral, localName: localName, rssi: RSSI, isConnectable: isConnectable)
     }
     
     // ------------------ CBPeripheralDelegate ------------------

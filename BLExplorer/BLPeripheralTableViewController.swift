@@ -12,6 +12,7 @@ import CoreBluetooth
 struct PeripheralWithExtraData {
     var peripheral: CBPeripheral
     var localName: String?
+    var rssi: NSNumber?
     var isConnectable: Bool? = true
 }
 
@@ -37,25 +38,30 @@ class BLPeripheralTableViewController: UIViewController, BLEManagerDelegate, BLS
     
     // ---------------- BLEManagerDelegate ---------------------------
     
-    func didDiscoverPeripheral(_ manager: BLEManager, peripheral: CBPeripheral, localName: String?, isConnectable: Bool?) {
+    func didDiscoverPeripheral(_ manager: BLEManager, peripheral: CBPeripheral, localName: String?, rssi: NSNumber, isConnectable: Bool?) {
         
         //print("Discovered \(peripheral.name)")
         
-        var peripheralWithExtraData = PeripheralWithExtraData(peripheral: peripheral, localName: "", isConnectable: true)
+        var peripheralWithExtraData = PeripheralWithExtraData(peripheral: peripheral, localName: "",rssi: 0, isConnectable: true)
             
         peripheralWithExtraData.localName = localName
         peripheralWithExtraData.isConnectable = isConnectable
+        peripheralWithExtraData.rssi = rssi
         
-        if peripherals.contains(where: {
-            per in
-            return per.localName == peripheralWithExtraData.localName
+        if let pos = peripherals.index(where: {
+            return $0.localName == peripheralWithExtraData.localName
         }) {
-            return
+            //just update only rssi value
+           peripherals[pos].rssi = rssi
+            
+            // fix this
+            peripheralsTableView?.reloadData()
+        } else {
+            peripherals.append(peripheralWithExtraData)
+            
+            // fix this
+            peripheralsTableView?.reloadData()
         }
-        
-        peripherals.append(peripheralWithExtraData)
-        
-        peripheralsTableView?.reloadData()
     }
     
     func didDisconnectPeripheral(_ manager: BLEManager, peripheral: CBPeripheral) {
@@ -109,7 +115,7 @@ class BLPeripheralTableViewController: UIViewController, BLEManagerDelegate, BLS
         let cell = tableView.dequeueReusableCell(withIdentifier: "PeripheralCell", for: indexPath)
         
         cell.textLabel?.text = peripherals[indexPath.row].peripheral.name
-        cell.detailTextLabel?.text = peripherals[indexPath.row].localName
+        cell.detailTextLabel?.text = String("\(peripherals[indexPath.row].localName)  RSSI: \(peripherals[indexPath.row].rssi)")
         
         return cell
     }
