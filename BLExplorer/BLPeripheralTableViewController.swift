@@ -100,7 +100,6 @@ class BLPeripheralTableViewController: UIViewController, BLEManagerDelegate, BLS
                 servicesTableViewController.bleManager = bleManager!
                 
                 servicesTableViewController.bleManager?.delegate = servicesTableViewController
-                
             }
         }
     }
@@ -112,10 +111,19 @@ class BLPeripheralTableViewController: UIViewController, BLEManagerDelegate, BLS
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "PeripheralCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "PeripheralCell", for: indexPath) as! PeripheralTableViewCell
         
-        cell.textLabel?.text = peripherals[indexPath.row].peripheral.name
-        cell.detailTextLabel?.text = String("\(peripherals[indexPath.row].localName)  RSSI: \(peripherals[indexPath.row].rssi)")
+        cell.name.text = peripherals[indexPath.row].peripheral.name
+        
+        if let localname = peripherals[indexPath.row].localName {
+            cell.localName.text = localname
+        } else {
+            cell.localName.text = ""
+        }
+        
+        if let rssi = peripherals[indexPath.row].rssi {
+            cell.rssi.text = "\(rssi)"
+        }
         
         return cell
     }

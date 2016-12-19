@@ -14,6 +14,7 @@
 		526062071B68079500801E06 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 526062061B68079500801E06 /* Assets.xcassets */; };
 		526062121B6807BC00801E06 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 526062111B6807BC00801E06 /* CoreBluetooth.framework */; };
 		5261C37C1D1B284400185498 /* BLPeripheralTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5261C37B1D1B284400185498 /* BLPeripheralTableViewController.swift */; };
+		528769101E035CA50025F7A2 /* PeripheralTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5287690F1E035CA50025F7A2 /* PeripheralTableViewCell.swift */; };
 		529479501DA314FA001DF46D /* StandardCharacteristics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5294794F1DA314FA001DF46D /* StandardCharacteristics.swift */; };
 		529479521DB58981001DF46D /* CharacteristicTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 529479511DB58981001DF46D /* CharacteristicTableViewCell.swift */; };
 		52B683511D9B39C700117E2B /* StandardServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52B683501D9B39C700117E2B /* StandardServices.swift */; };
@@ -31,6 +32,7 @@
 		5260620B1B68079500801E06 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		526062111B6807BC00801E06 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 		5261C37B1D1B284400185498 /* BLPeripheralTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLPeripheralTableViewController.swift; sourceTree = "<group>"; };
+		5287690F1E035CA50025F7A2 /* PeripheralTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeripheralTableViewCell.swift; sourceTree = "<group>"; };
 		5294794F1DA314FA001DF46D /* StandardCharacteristics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StandardCharacteristics.swift; sourceTree = "<group>"; };
 		529479511DB58981001DF46D /* CharacteristicTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CharacteristicTableViewCell.swift; sourceTree = "<group>"; };
 		52B683501D9B39C700117E2B /* StandardServices.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StandardServices.swift; sourceTree = "<group>"; };
@@ -81,6 +83,7 @@
 				52B683501D9B39C700117E2B /* StandardServices.swift */,
 				5294794F1DA314FA001DF46D /* StandardCharacteristics.swift */,
 				529479511DB58981001DF46D /* CharacteristicTableViewCell.swift */,
+				5287690F1E035CA50025F7A2 /* PeripheralTableViewCell.swift */,
 				52EF204E1DEF968D00763181 /* Launch Screen.storyboard */,
 			);
 			path = BLExplorer;
@@ -163,6 +166,7 @@
 				52B683511D9B39C700117E2B /* StandardServices.swift in Sources */,
 				5245F0DF1D1C92F300876EA5 /* BLServicesTableViewController.swift in Sources */,
 				5261C37C1D1B284400185498 /* BLPeripheralTableViewController.swift in Sources */,
+				528769101E035CA50025F7A2 /* PeripheralTableViewCell.swift in Sources */,
 				52DFCE811D481F7B008DD1BF /* BLEManager.swift in Sources */,
 				52590EC31D24756D00511194 /* BLCharacteristicsTableViewController.swift in Sources */,
 				526062001B68079500801E06 /* AppDelegate.swift in Sources */,
