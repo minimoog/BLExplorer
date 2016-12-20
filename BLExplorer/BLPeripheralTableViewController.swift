@@ -20,6 +20,7 @@ class BLPeripheralTableViewController: UIViewController, BLEManagerDelegate, BLS
 {
     var bleManager: BLEManager?
     var peripherals = [PeripheralWithExtraData]()
+    var refreshControl = UIRefreshControl()
     @IBOutlet var peripheralsTableView: UITableView!
     
     override func viewDidLoad() {
@@ -29,11 +30,28 @@ class BLPeripheralTableViewController: UIViewController, BLEManagerDelegate, BLS
         
         peripheralsTableView?.delegate = self
         peripheralsTableView?.dataSource = self
+        
+        refreshControl.attributedTitle = NSAttributedString(string: "Pull To Refresh")
+        refreshControl.addTarget(self, action: #selector(self.refreshPeripherals(sender:)), for: .valueChanged)
+        peripheralsTableView?.addSubview(refreshControl)
     }
     
     func clear() {
         peripherals = []
         peripheralsTableView?.reloadData()
+    }
+    
+    func refreshPeripherals(sender: AnyObject) {
+        bleManager?.stopScan()
+        
+        sender.endRefreshing()
+        
+        peripherals = []
+        peripheralsTableView.reloadData()
+        
+        bleManager?.scan()
+        
+        print("End refreshing")
     }
     
     // ---------------- BLEManagerDelegate ---------------------------
