@@ -20,7 +20,6 @@ class BLPeripheralTableViewController: UIViewController, BLEManagerDelegate, BLS
 {
     var bleManager: BLEManager?
     var peripherals = [PeripheralWithExtraData]()
-    var refreshControl = UIRefreshControl()
     @IBOutlet var peripheralsTableView: UITableView!
     
     override func viewDidLoad() {
@@ -31,9 +30,12 @@ class BLPeripheralTableViewController: UIViewController, BLEManagerDelegate, BLS
         peripheralsTableView?.delegate = self
         peripheralsTableView?.dataSource = self
         
+        let refreshControl = UIRefreshControl()
+        
         refreshControl.attributedTitle = NSAttributedString(string: "Pull To Refresh")
         refreshControl.addTarget(self, action: #selector(self.refreshPeripherals(sender:)), for: .valueChanged)
         peripheralsTableView?.addSubview(refreshControl)
+        peripheralsTableView.refreshControl = refreshControl
     }
     
     func clear() {
@@ -67,7 +69,7 @@ class BLPeripheralTableViewController: UIViewController, BLEManagerDelegate, BLS
         peripheralWithExtraData.rssi = rssi
         
         if let pos = peripherals.index(where: {
-            return $0.localName == peripheralWithExtraData.localName
+            return $0.peripheral.name == peripheralWithExtraData.peripheral.name
         }) {
             //just update only rssi value
            peripherals[pos].rssi = rssi
