@@ -115,14 +115,10 @@ class BLPeripheralTableViewController: UIViewController, BLEManagerDelegate, BLS
         
         cell.name.text = peripherals[indexPath.row].peripheral.name
         
-        if let localname = peripherals[indexPath.row].localName {
-            cell.localName.text = localname
-        } else {
-            cell.localName.text = ""
-        }
-        
         if let rssi = peripherals[indexPath.row].rssi {
             cell.rssi.text = "\(rssi)"
+        } else {
+            cell.rssi.text = ""
         }
         
         return cell
