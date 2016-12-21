@@ -46,11 +46,10 @@ class BLPeripheralTableViewController: UIViewController, BLEManagerDelegate, BLS
     func refreshPeripherals(sender: AnyObject) {
         bleManager?.stopScan()
         
-        sender.endRefreshing()
-        
         peripherals = []
         peripheralsTableView.reloadData()
         
+        sender.endRefreshing()
         bleManager?.scan()
         
         print("End refreshing")
@@ -136,7 +135,7 @@ class BLPeripheralTableViewController: UIViewController, BLEManagerDelegate, BLS
         cell.name.text = peripherals[indexPath.row].peripheral.name
         
         if let rssi = peripherals[indexPath.row].rssi {
-            cell.rssi.text = "\(rssi)"
+            cell.rssi.text = "RSSI: \(rssi)"
         } else {
             cell.rssi.text = ""
         }
