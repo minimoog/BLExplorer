@@ -51,15 +51,11 @@ class BLPeripheralTableViewController: UIViewController, BLEManagerDelegate, BLS
         
         sender.endRefreshing()
         bleManager?.scan()
-        
-        print("End refreshing")
     }
     
     // ---------------- BLEManagerDelegate ---------------------------
     
     func didDiscoverPeripheral(_ manager: BLEManager, peripheral: CBPeripheral, localName: String?, rssi: NSNumber, isConnectable: Bool?) {
-        
-        //print("Discovered \(peripheral.name)")
         
         var peripheralWithExtraData = PeripheralWithExtraData(peripheral: peripheral, localName: "",rssi: 0, isConnectable: true)
             
@@ -133,6 +129,10 @@ class BLPeripheralTableViewController: UIViewController, BLEManagerDelegate, BLS
         let cell = tableView.dequeueReusableCell(withIdentifier: "PeripheralCell", for: indexPath) as! PeripheralTableViewCell
         
         cell.name.text = peripherals[indexPath.row].peripheral.name
+        
+        if cell.name.text == "" {
+            cell.name.text = "NoName"
+        }
         
         if let rssi = peripherals[indexPath.row].rssi {
             cell.rssi.text = "RSSI: \(rssi)"
