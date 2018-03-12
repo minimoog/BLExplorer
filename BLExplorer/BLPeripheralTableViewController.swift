@@ -95,8 +95,11 @@ class BLPeripheralTableViewController: UITableViewController, BLEManagerDelegate
     func didDisconnectPeripheral(_ manager: BLEManager, peripheral: CBPeripheral) {
         //print("Disconnecting \(peripheral.name)")
         
-        //### TODO: Rescan?
-        //### TODO: Fail to connect handler
+        #if DEBUG
+            print("Disconnecting")
+        #endif
+        
+        startTimer()
     }
 
     func didPoweredOn(_ manager: BLEManager) {
@@ -121,6 +124,7 @@ class BLPeripheralTableViewController: UITableViewController, BLEManagerDelegate
             if let servicesTableViewController = segue.destination as? BLServicesTableViewController {
                 //stop scanning
                 bleManager?.stopScan()
+                stopTimer()
                 peripherals = []
                 peripheralsTableView?.reloadData()
                 
@@ -159,6 +163,8 @@ class BLPeripheralTableViewController: UITableViewController, BLEManagerDelegate
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        stopTimer()
+        
         bleManager?.connect(peripherals[indexPath.row].peripheral) {
             self.performSegue(withIdentifier: "ServicesSegue", sender: self)
         }

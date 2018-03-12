@@ -36,6 +36,7 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     fileprivate var didDiscoverServicesCompletionHandler: (() -> ())?
     fileprivate var didDiscoverCharacteristicsCompletionHandler: (() -> ())?
     fileprivate var didUpdateValue: ((_ characteristic: CBCharacteristic, _ value: Data?) -> ())?
+    fileprivate weak var timer: Timer?
     
     weak var delegate: BLEManagerDelegate?
     
@@ -55,6 +56,7 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     func connect(_ peripheral: CBPeripheral, completionHandler: @escaping () -> ()) {
         connectedPeripheral = peripheral
         cbManager?.connect(peripheral, options: nil)
+        startTimeout()
         
         didConnectCompletionHandler = completionHandler
     }
@@ -105,9 +107,29 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
         }
     }
     
+    //--------------- Timer for timeot on disconnection--------------
+    
+    func startTimeout() {
+        timer?.invalidate()   // just in case you had existing `Timer`, `invalidate` it before we lose our reference to it
+        timer = Timer.scheduledTimer(withTimeInterval: 10.0, repeats: false) { [weak self] _ in
+            guard let peripheral = self?.connectedPeripheral else { return }
+            
+            self?.cbManager?.cancelPeripheralConnection(peripheral)
+        }
+    }
+    
+    func stopTimeout() {
+        timer?.invalidate()
+    }
+    
+    deinit {
+        stopTimeout()
+    }
+    
     //--------------- CBCentralManagerDelegate
     
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
+        stopTimeout()
         connectedPeripheral?.delegate = self
         
         if let connectedHandler = didConnectCompletionHandler {
@@ -128,7 +150,7 @@ class BLEManager: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     }
     
     func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
-        // ### Closure
+        delegate?.didDisconnectPeripheral(self, peripheral: peripheral)
     }
     
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
