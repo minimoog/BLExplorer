@@ -101,6 +101,12 @@
       "idiom" : "ipad",
       "filename" : "iPad pro app 167x167.fw.png",
       "scale" : "2x"
+    },
+    {
+      "size" : "1024x1024",
+      "idiom" : "ios-marketing",
+      "filename" : "1024.fw.png",
+      "scale" : "1x"
     }
   ],
   "info" : {

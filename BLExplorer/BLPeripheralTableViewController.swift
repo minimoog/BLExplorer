@@ -16,10 +16,11 @@ struct PeripheralWithExtraData {
     var isConnectable: Bool? = true
 }
 
-class BLPeripheralTableViewController: UIViewController, BLEManagerDelegate, BLServicesDelegate, UITableViewDelegate, UITableViewDataSource
-{
+class BLPeripheralTableViewController: UITableViewController, BLEManagerDelegate, BLServicesDelegate {
     var bleManager: BLEManager?
     var peripherals = [PeripheralWithExtraData]()
+    weak var timer: Timer?
+    
     @IBOutlet var peripheralsTableView: UITableView!
     
     override func viewDidLoad() {
@@ -30,12 +31,7 @@ class BLPeripheralTableViewController: UIViewController, BLEManagerDelegate, BLS
         peripheralsTableView?.delegate = self
         peripheralsTableView?.dataSource = self
         
-        let refreshControl = UIRefreshControl()
-        
-        refreshControl.attributedTitle = NSAttributedString(string: "Pull To Refresh")
-        refreshControl.addTarget(self, action: #selector(self.refreshPeripherals(sender:)), for: .valueChanged)
-        peripheralsTableView?.addSubview(refreshControl)
-        peripheralsTableView.refreshControl = refreshControl
+        startTimer()
     }
     
     func clear() {
@@ -43,7 +39,7 @@ class BLPeripheralTableViewController: UIViewController, BLEManagerDelegate, BLS
         peripheralsTableView?.reloadData()
     }
     
-    func refreshPeripherals(sender: AnyObject) {
+    @IBAction func refresh(_ sender: UIRefreshControl) {
         bleManager?.stopScan()
         
         peripherals = []
@@ -51,6 +47,23 @@ class BLPeripheralTableViewController: UIViewController, BLEManagerDelegate, BLS
         
         sender.endRefreshing()
         bleManager?.scan()
+    }
+    
+    // ----------------- Timer stuff ---------------------------------
+    
+    func startTimer() {
+        timer?.invalidate()   // just in case you had existing `Timer`, `invalidate` it before we lose our reference to it
+        timer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: true) { [weak self] _ in
+            self?.bleManager?.scan()
+        }
+    }
+    
+    func stopTimer() {
+        timer?.invalidate()
+    }
+    
+    deinit {
+        stopTimer()
     }
     
     // ---------------- BLEManagerDelegate ---------------------------
@@ -121,11 +134,11 @@ class BLPeripheralTableViewController: UIViewController, BLEManagerDelegate, BLS
     
     // --------------- Table View ---------------
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return peripherals.count
     }
 
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "PeripheralCell", for: indexPath) as! PeripheralTableViewCell
         
         cell.name.text = peripherals[indexPath.row].peripheral.name
@@ -135,7 +148,9 @@ class BLPeripheralTableViewController: UIViewController, BLEManagerDelegate, BLS
         }
         
         if let rssi = peripherals[indexPath.row].rssi {
-            cell.rssi.text = "RSSI: \(rssi)"
+            if rssi != 127 {
+                cell.rssi.text = "RSSI: \(rssi)"
+            }
         } else {
             cell.rssi.text = ""
         }
@@ -143,7 +158,7 @@ class BLPeripheralTableViewController: UIViewController, BLEManagerDelegate, BLS
         return cell
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         bleManager?.connect(peripherals[indexPath.row].peripheral) {
             self.performSegue(withIdentifier: "ServicesSegue", sender: self)
         }
